@@ -31,10 +31,10 @@ WDC65816TargetMachine::WDC65816TargetMachine(const Target &T, StringRef TT,
                                        Reloc::Model RM, CodeModel::Model CM,
                                        CodeGenOpt::Level OL)
 : LLVMTargetMachine(T, TT, CPU, FS, Options, RM, CM, OL),
-DL(Subtarget.getDataLayout()),
-InstrInfo(Subtarget),
+DL("e-p:32:8:8-i16:8:8-f32:8:8-f68:8:8-n16"),
+InstrInfo(),
 TLInfo(*this), TSInfo(*this),
-FrameLowering(Subtarget) {
+FrameLowering() {
     initAsmInfo();
 }
 

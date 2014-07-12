@@ -24,7 +24,6 @@ namespace llvm {
     class formatted_raw_ostream;
     
     FunctionPass *createWDC65816ISelDag(WDC65816TargetMachine &TM);
-    FunctionPass *createWDC65816DelaySlotFillerPass(TargetMachine &TM);
     
 } // end namespace llvm;
 
