@@ -49,7 +49,7 @@ def AddrModeGrp1AbsIdxY           : AddrModeGrp1<25>;
 def AddrModeGrp1DPIdxIndirX       : AddrModeGrp1<1>;
 def AddrModeGrp1DPIndirIdxY       : AddrModeGrp1<17>;
 def AddrModeGrp1DPIndir           : AddrModeGrp1<18>;
-def AddrModeGrp1DPIndirLongIndY   : AddrModeGrp1<23>;
+def AddrModeGrp1DPIndirLongIdxY   : AddrModeGrp1<23>;
 def AddrModeGrp1DPIndirLong       : AddrModeGrp1<7>;
 def AddrModeGrp1AbsLong           : AddrModeGrp1<15>;
 def AddrModeGrp1AbsLongIdxX       : AddrModeGrp1<31>;
