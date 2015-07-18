@@ -39,7 +39,8 @@ projects/*
 !projects/CMakeLists.txt
 !projects/Makefile
 # Clang, which is tracked independently.
-tools/clang
+# Except I am going to integrate it for my WDC65816 repository...
+# tools/clang
 # LLDB, which is tracked independently.
 tools/lldb
 # lld, which is tracked independently.
