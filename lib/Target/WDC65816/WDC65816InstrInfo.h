@@ -24,9 +24,10 @@ namespace llvm {
     
     class WDC65816InstrInfo : public WDC65816GenInstrInfo {
         const WDC65816RegisterInfo RI;
+        const WDC65816Subtarget& Subtarget;
         virtual void anchor();
     public:
-        explicit WDC65816InstrInfo(void);
+        explicit WDC65816InstrInfo(WDC65816Subtarget &ST);
         
         /// getRegisterInfo - TargetInstrInfo is a superset of MRegister info.  As
         /// such, whenever a client has an instance of instruction info, it should

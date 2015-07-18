@@ -99,6 +99,7 @@ void WDC65816AsmPrinter::printMemOperand(const MachineInstr *MI, int opNum,
 bool WDC65816AsmPrinter::printGetPCX(const MachineInstr *MI, unsigned opNum,
                                      raw_ostream &O) {
     // WDC_TODO - print whatever this is here...
+    return true;
 }
 
 #if 0 // WDC_TODO - How much of this do we need?

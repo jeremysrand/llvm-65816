@@ -14,6 +14,7 @@
 #include "WDC65816InstrInfo.h"
 #include "WDC65816.h"
 #include "WDC65816MachineFunctionInfo.h"
+#include "WDC65816Subtarget.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/ADT/SmallVector.h"
 #include "llvm/CodeGen/MachineFrameInfo.h"
@@ -32,9 +33,9 @@ using namespace llvm;
 // Pin the vtable to this file.
 void WDC65816InstrInfo::anchor() {}
 
-WDC65816InstrInfo::WDC65816InstrInfo(void)
+WDC65816InstrInfo::WDC65816InstrInfo(WDC65816Subtarget &ST)
 : WDC65816GenInstrInfo(WDC::ADJCALLSTACKDOWN, WDC::ADJCALLSTACKUP),
-RI() {
+RI(ST), Subtarget(ST) {
 }
 
 

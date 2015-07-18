@@ -15,14 +15,18 @@
 #define WDC65816_FRAMEINFO_H
 
 #include "WDC65816.h"
+#include "WDC65816Subtarget.h"
 #include "llvm/Target/TargetFrameLowering.h"
 
 namespace llvm {
+    class WDC65816Subtarget;
     
     class WDC65816FrameLowering : public TargetFrameLowering {
+        const WDC65816Subtarget &SubTarget;
     public:
-        explicit WDC65816FrameLowering(void)
-        : TargetFrameLowering(TargetFrameLowering::StackGrowsDown, 1, 0) {}
+        explicit WDC65816FrameLowering(const WDC65816Subtarget &ST)
+        : TargetFrameLowering(TargetFrameLowering::StackGrowsDown, 1, 0),
+        SubTarget(ST) {}
         
         bool hasFP(const MachineFunction &MF) const;
         

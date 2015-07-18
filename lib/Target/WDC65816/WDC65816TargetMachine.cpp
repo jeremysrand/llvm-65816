@@ -31,10 +31,11 @@ WDC65816TargetMachine::WDC65816TargetMachine(const Target &T, StringRef TT,
                                        Reloc::Model RM, CodeModel::Model CM,
                                        CodeGenOpt::Level OL)
 : LLVMTargetMachine(T, TT, CPU, FS, Options, RM, CM, OL),
-DL("e-p:32:8:8-i16:8:8-f32:8:8-f68:8:8-n16"),
-InstrInfo(),
+Subtarget(TT, CPU, FS),
+DL(Subtarget.getDataLayout()),
+InstrInfo(Subtarget),
 TLInfo(*this), TSInfo(*this),
-FrameLowering() {
+FrameLowering(Subtarget) {
     initAsmInfo();
 }
 
@@ -67,5 +68,5 @@ bool WDC65816PassConfig::addInstSelector() {
 /// passes immediately before machine code is emitted.  This should return
 /// true if -print-machineinstrs should print out the code after the passes.
 bool WDC65816PassConfig::addPreEmitPass(){
-    return true;
+    return false;
 }

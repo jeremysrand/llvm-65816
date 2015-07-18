@@ -30,10 +30,11 @@ using namespace llvm;
 ///
 namespace {
     class WDC65816DAGToDAGISel : public SelectionDAGISel {
+        const WDC65816Subtarget &Subtarget;
         WDC65816TargetMachine &TM;
     public:
         explicit WDC65816DAGToDAGISel(WDC65816TargetMachine &tm)
-        : SelectionDAGISel(tm),
+        : SelectionDAGISel(tm), Subtarget(tm.getSubtarget<WDC65816Subtarget>()),
         TM(tm) {
         }
         

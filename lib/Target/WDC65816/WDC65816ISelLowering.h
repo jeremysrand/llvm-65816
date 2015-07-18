@@ -19,6 +19,7 @@
 #include "llvm/Target/TargetLowering.h"
 
 namespace llvm {
+    class WDC65816Subtarget;
 #if 0 // WDC_TODO - Do I need any of this?
     namespace SPISD {
         enum {
@@ -52,6 +53,7 @@ namespace llvm {
 #endif
     
     class WDC65816TargetLowering : public TargetLowering {
+        const WDC65816Subtarget *Subtarget;
     public:
         WDC65816TargetLowering(TargetMachine &TM);
         

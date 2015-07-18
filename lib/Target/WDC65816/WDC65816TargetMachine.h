@@ -18,6 +18,7 @@
 #include "WDC65816ISelLowering.h"
 #include "WDC65816InstrInfo.h"
 #include "WDC65816SelectionDAGInfo.h"
+#include "WDC65816Subtarget.h"
 #include "llvm/IR/DataLayout.h"
 #include "llvm/Target/TargetFrameLowering.h"
 #include "llvm/Target/TargetMachine.h"
@@ -25,7 +26,7 @@
 namespace llvm {
     
     class WDC65816TargetMachine : public LLVMTargetMachine {
-        // SparcSubtarget Subtarget;   WDC_TODO - Do I need this?
+        WDC65816Subtarget Subtarget;
         const DataLayout DL;       // Calculates type size & alignment
         WDC65816InstrInfo InstrInfo;
         WDC65816TargetLowering TLInfo;
@@ -41,6 +42,7 @@ namespace llvm {
         virtual const TargetFrameLowering  *getFrameLowering() const {
             return &FrameLowering;
         }
+        virtual const WDC65816Subtarget   *getSubtargetImpl() const{ return &Subtarget; }
         virtual const WDC65816RegisterInfo *getRegisterInfo() const {
             return &InstrInfo.getRegisterInfo();
         }

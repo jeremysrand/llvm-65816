@@ -16,6 +16,7 @@ add_llvm_target(WDC65816CodeGen
   WDC65816FrameLowering.cpp
   WDC65816MachineFunctionInfo.cpp
   WDC65816RegisterInfo.cpp
+  WDC65816Subtarget.cpp
   WDC65816TargetMachine.cpp
   WDC65816SelectionDAGInfo.cpp
 )

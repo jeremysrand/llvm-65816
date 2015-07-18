@@ -13,6 +13,8 @@
 
 #include "WDC65816RegisterInfo.h"
 #include "WDC65816.h"
+#include "WDC65816MachineFunctionInfo.h"
+#include "WDC65816Subtarget.h"
 #include "llvm/ADT/BitVector.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/CodeGen/MachineFrameInfo.h"
@@ -34,8 +36,8 @@ ReserveAppRegisters("sparc-reserve-app-registers", cl::Hidden, cl::init(false),
                     cl::desc("Reserve application registers (%g2-%g4)"));
 #endif
 
-WDC65816RegisterInfo::WDC65816RegisterInfo(void)
-: WDC65816GenRegisterInfo(WDC::P) {
+WDC65816RegisterInfo::WDC65816RegisterInfo(WDC65816Subtarget &st)
+: WDC65816GenRegisterInfo(WDC::P), Subtarget(st) {
 }
 
 const uint16_t* WDC65816RegisterInfo::getCalleeSavedRegs(const MachineFunction *MF)
