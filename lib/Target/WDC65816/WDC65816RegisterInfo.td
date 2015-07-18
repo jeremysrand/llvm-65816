@@ -1,4 +1,4 @@
-//===- WDC65816RegisterInfo.td - WDC65816 Register defs ----------*- tablegen -*-===//
+//===- WDC65816RegisterInfo.td - WDC65816 Register defs ----*- tablegen -*-===//
 // 
 //                     The LLVM Compiler Infrastructure
 //
@@ -21,7 +21,11 @@ let Namespace = "WDC" in {
   def K : Register<"K">;
   def B : Register<"B">;
   def PC : Register<"PC">;
+  def FP : Register<"FP">;  // WDC_TODO - this will end up being a 32-bit zero page value
 }
+
+// WDC_TODO - model all zero page values as a series of 16-bit, 32-bit, 64-bit registers
+//   Also model them as floating point registers.
 
 def IntRegs : RegisterClass<"WDC", [i16], 8,
                          (add A, X, Y)>;

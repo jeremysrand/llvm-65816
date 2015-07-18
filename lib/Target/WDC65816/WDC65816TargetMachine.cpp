@@ -1,4 +1,4 @@
-//===-- WDC65816TargetMachine.cpp - Define TargetMachine for WDC65816 -----------===//
+//===- WDC65816TargetMachine.cpp - Define TargetMachine for WDC65816 ------===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -53,10 +53,6 @@ namespace {
         virtual bool addPreEmitPass();
     };
 } // namespace
-
-TargetPassConfig *WDC65816TargetMachine::createPassConfig(PassManagerBase &PM) {
-    return new WDC65816PassConfig(this, PM);
-}
 
 bool WDC65816PassConfig::addInstSelector() {
     addPass(createWDC65816ISelDag(getWDC65816TargetMachine()));

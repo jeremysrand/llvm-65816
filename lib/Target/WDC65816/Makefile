@@ -14,10 +14,9 @@ TARGET = WDC65816
 # Make sure that tblgen is run, first thing.
 BUILT_SOURCES = WDC65816GenRegisterInfo.inc WDC65816GenInstrInfo.inc \
 		WDC65816GenAsmWriter.inc WDC65816GenDAGISel.inc \
-		WDC65816GenSubtargetInfo.inc WDC65816GenCallingConv.inc \
-		WDC65816GenCodeEmitter.inc
+		WDC65816GenSubtargetInfo.inc WDC65816GenCallingConv.inc
 
-# DIRS = InstPrinter Disassembler AsmParser TargetInfo MCTargetDesc
+DIRS = TargetInfo MCTargetDesc
 
 include $(LEVEL)/Makefile.common
 

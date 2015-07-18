@@ -1,4 +1,4 @@
-//===-- WDC65816.td - Describe the WDC65816 Target Machine -------*- tablegen -*-===//
+//===-- WDC65816.td - Describe the WDC65816 Target Machine -*- tablegen -*-===//
 //
 //                     The LLVM Compiler Infrastructure
 //

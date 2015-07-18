@@ -1,4 +1,4 @@
-//===- WDCCallingConv.td - Calling Conventions WDC65816 -----*- tablegen -*-===//
+//===- WDCCallingConv.td - Calling Conventions WDC65816 ----*- tablegen -*-===//
 // 
 //                     The LLVM Compiler Infrastructure
 //
@@ -27,3 +27,6 @@ def CC_WDC : CallingConv<[
   CCIfType<[i16], CCAssignToStack<2, 1>>,
   CCIfType<[i32, f32], CCAssignToStack<4, 1>>
 ]>;
+
+
+def CSR_NoRegs : CalleeSavedRegs<(add)>;

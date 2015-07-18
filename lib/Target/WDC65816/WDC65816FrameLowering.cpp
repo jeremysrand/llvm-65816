@@ -1,4 +1,4 @@
-//===-- WDC65816FrameLowering.cpp - WDC65816 Frame Information ------------------===//
+//===-- WDC65816FrameLowering.cpp - WDC65816 Frame Information ------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -23,6 +23,22 @@
 #include "llvm/Target/TargetOptions.h"
 
 using namespace llvm;
+
+// hasFP - Whether or not there is a frame pointer.
+// WDC_TODO - for now we will say we always have a frame pointer.
+bool WDC65816FrameLowering::hasFP(const MachineFunction &MF) const {
+    return true;
+}
+
+
+void WDC65816FrameLowering::emitPrologue(MachineFunction &MF) const {
+}
+
+
+void WDC65816FrameLowering::emitEpilogue(MachineFunction &MF,
+                                      MachineBasicBlock &MBB) const {
+}
+
 
 #if 0 // JSR TODO - Do I need any of this?
 static cl::opt<bool>

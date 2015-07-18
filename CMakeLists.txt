@@ -110,6 +110,7 @@ set(LLVM_ALL_TARGETS
   R600
   Sparc
   SystemZ
+  WDC65816
   X86
   XCore
   )

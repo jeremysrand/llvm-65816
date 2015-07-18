@@ -1,4 +1,4 @@
-//===-- WDC65816TargetMachine.h - Define TargetMachine for WDC65816 ---*- C++ -*-===//
+//===- WDC65816TargetMachine.h - Define TargetMachine for WDC65816 -*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -25,7 +25,7 @@
 namespace llvm {
     
     class WDC65816TargetMachine : public LLVMTargetMachine {
-        // SparcSubtarget Subtarget;   JSR_TODO - Do I need this?
+        // SparcSubtarget Subtarget;   WDC_TODO - Do I need this?
         const DataLayout DL;       // Calculates type size & alignment
         WDC65816InstrInfo InstrInfo;
         WDC65816TargetLowering TLInfo;
@@ -52,9 +52,11 @@ namespace llvm {
         }
         virtual const DataLayout       *getDataLayout() const { return &DL; }
         
+#if 0 // WDC_TODO - Do I need this?  I think these are both related to JIT
         // Pass Pipeline Configuration
         virtual TargetPassConfig *createPassConfig(PassManagerBase &PM);
         virtual bool addCodeEmitter(PassManagerBase &PM, JITCodeEmitter &JCE);
+#endif
     };
     
 } // end namespace llvm

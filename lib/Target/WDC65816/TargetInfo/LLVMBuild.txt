@@ -1,4 +1,4 @@
-;===- ./lib/Target/WDC65816/LLVMBuild.txt ----------------------*- Conf -*--===;
+;===- ./lib/Target/WDC65816/TargetInfo/LLVMBuild.txt -----------*- Conf -*--===;
 ;
 ;                     The LLVM Compiler Infrastructure
 ;
@@ -15,20 +15,9 @@
 ;
 ;===------------------------------------------------------------------------===;
 
-[common]
-subdirectories = MCTargetDesc TargetInfo
-
 [component_0]
-type = TargetGroup
-name = WDC65816
-parent = Target
-has_asmprinter = 1
-has_jit = 0
-
-[component_1]
 type = Library
-name = WDC65816CodeGen
+name = WDC65816Info
 parent = WDC65816
-required_libraries = AsmPrinter CodeGen Core MC SelectionDAG WDC65816Desc
-                    WDC65816Info Support Target
+required_libraries = MC Support Target
 add_to_library_groups = WDC65816

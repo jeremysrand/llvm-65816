@@ -1,4 +1,4 @@
-//===-- WDC65816.h - Top-level interface for WDC65816 representation --*- C++ -*-===//
+//===- WDC65816.h - Top-level interface for WDC65816 representation -*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -15,6 +15,7 @@
 #ifndef WDC65816_H
 #define WDC65816_H
 
+#include "MCTargetDesc/WDC65816MCTargetDesc.h"
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Target/TargetMachine.h"
 
@@ -28,7 +29,7 @@ namespace llvm {
 } // end namespace llvm;
 
 namespace llvm {
-#if 0  // JSR_TODO - Something here?
+#if 0  // WDC_TODO - Something here?
     // Enums corresponding to Sparc condition codes, both icc's and fcc's.  These
     // values must be kept in sync with the ones in the .td file.
     namespace SPCC {

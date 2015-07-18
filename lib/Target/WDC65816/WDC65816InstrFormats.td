@@ -1,4 +1,4 @@
-//===- WDCInstrFormats.td - WDC 65816 Instruction Formats ----*- tablegen -*-===//
+//===- WDCInstrFormats.td - WDC 65816 Instruction Formats --*- tablegen -*-===//
 // 
 //                     The LLVM Compiler Infrastructure
 //

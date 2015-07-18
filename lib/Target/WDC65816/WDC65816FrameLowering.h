@@ -1,4 +1,4 @@
-//===-- WDC65816FrameLowering.h - Define frame lowering for Sparc --*- C++ -*-===//
+//===- WDC65816FrameLowering.h - Define frame lowering for Sparc -*- C++ -*-===//
 //
 //                     The LLVM Compiler Infrastructure
 //
@@ -23,18 +23,20 @@ namespace llvm {
     public:
         explicit WDC65816FrameLowering(void)
         : TargetFrameLowering(TargetFrameLowering::StackGrowsDown, 1, 0) {}
-#if 0 // JSR TODO - do I need any of this?
+        
+        bool hasFP(const MachineFunction &MF) const;
+        
         /// emitProlog/emitEpilog - These methods insert prolog and epilog code into
         /// the function.
         void emitPrologue(MachineFunction &MF) const;
         void emitEpilogue(MachineFunction &MF, MachineBasicBlock &MBB) const;
+#if 0 // JSR TODO - do I need any of this?
         
         void eliminateCallFramePseudoInstr(MachineFunction &MF,
                                            MachineBasicBlock &MBB,
                                            MachineBasicBlock::iterator I) const;
         
         bool hasReservedCallFrame(const MachineFunction &MF) const;
-        bool hasFP(const MachineFunction &MF) const;
         void processFunctionBeforeCalleeSavedScan(MachineFunction &MF,
                                                   RegScavenger *RS = NULL) const;
         
