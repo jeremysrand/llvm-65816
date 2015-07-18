@@ -52,9 +52,9 @@ namespace llvm {
         }
         virtual const DataLayout       *getDataLayout() const { return &DL; }
         
-#if 0 // WDC_TODO - Do I need this?  I think these are both related to JIT
         // Pass Pipeline Configuration
         virtual TargetPassConfig *createPassConfig(PassManagerBase &PM);
+#if 0 // WDC_TODO - Do I need this?  I think this is related to JIT
         virtual bool addCodeEmitter(PassManagerBase &PM, JITCodeEmitter &JCE);
 #endif
     };

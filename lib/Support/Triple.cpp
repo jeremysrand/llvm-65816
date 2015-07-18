@@ -90,6 +90,7 @@ const char *Triple::getArchTypePrefix(ArchType Kind) {
   case amdil:   return "amdil";
   case spir:    return "spir";
   case spir64:  return "spir";
+  case wdc65816: return "wdc65816";
   }
 }
 
@@ -188,6 +189,7 @@ Triple::ArchType Triple::getArchTypeForLLVMName(StringRef Name) {
     .Case("amdil", amdil)
     .Case("spir", spir)
     .Case("spir64", spir64)
+    .Case("wdc65816", wdc65816)
     .Default(UnknownArch);
 }
 
@@ -214,6 +216,7 @@ const char *Triple::getArchNameForAssembler() {
     .Case("amdil", "amdil")
     .Case("spir", "spir")
     .Case("spir64", "spir64")
+    .Case("wdc65816", "wdc65816")
     .Default(NULL);
 }
 
@@ -251,6 +254,7 @@ static Triple::ArchType parseArch(StringRef ArchName) {
     .Case("amdil", Triple::amdil)
     .Case("spir", Triple::spir)
     .Case("spir64", Triple::spir64)
+    .Case("wdc65816", Triple::wdc65816)
     .Default(Triple::UnknownArch);
 }
 

@@ -54,6 +54,10 @@ namespace {
     };
 } // namespace
 
+TargetPassConfig *WDC65816TargetMachine::createPassConfig(PassManagerBase &PM) {
+    return new WDC65816PassConfig(this, PM);
+}
+
 bool WDC65816PassConfig::addInstSelector() {
     addPass(createWDC65816ISelDag(getWDC65816TargetMachine()));
     return false;
