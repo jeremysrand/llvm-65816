@@ -34,10 +34,11 @@ compile_commands.json
 # Directories to ignore (do not add trailing '/'s, they skip symlinks).
 #==============================================================================#
 # External projects that are tracked independently.
-projects/*
-!projects/sample
-!projects/CMakeLists.txt
-!projects/Makefile
+# Except I am going to integrate it for my WDC65816 repository...
+#projects/*
+#!projects/sample
+#!projects/CMakeLists.txt
+#!projects/Makefile
 # Clang, which is tracked independently.
 # Except I am going to integrate it for my WDC65816 repository...
 # tools/clang
