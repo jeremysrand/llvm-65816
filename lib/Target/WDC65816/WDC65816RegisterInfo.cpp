@@ -64,14 +64,14 @@ BitVector WDC65816RegisterInfo::getReservedRegs(const MachineFunction &MF) const
     Reserved.set(WDC::K);
     Reserved.set(WDC::B);
     Reserved.set(WDC::PC);
-    Reserved.set(WDC::FP);
+    Reserved.set(WDC::dpI32_0);     // This register is used as the frame pointer.
     
     return Reserved;
 }
 
 
 unsigned WDC65816RegisterInfo::getFrameRegister(const MachineFunction &MF) const {
-    return WDC::FP;
+    return WDC::dpI32_0;
 }
 
 

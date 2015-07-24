@@ -39,7 +39,7 @@ static MCInstrInfo *createWDC65816MCInstrInfo() {
 
 static MCRegisterInfo *createWDC65816MCRegisterInfo(StringRef TT) {
     MCRegisterInfo *X = new MCRegisterInfo();
-    InitWDC65816MCRegisterInfo(X, WDC::FP);
+    InitWDC65816MCRegisterInfo(X, WDC::dpI32_0);  // The frame pointer is the 0th 32-bit direct page register
     return X;
 }
 
