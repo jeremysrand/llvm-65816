@@ -10,6 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+
+#include <sys/time.h>
+
 #include "WDC65816TargetMachine.h"
 #include "WDC65816.h"
 #include "llvm/CodeGen/Passes.h"
@@ -21,6 +24,7 @@ using namespace llvm;
 extern "C" void LLVMInitializeWDC65816Target() {
     // Register the target.
     RegisterTargetMachine<WDC65816TargetMachine> X(TheWDC65816Target);
+    WDC_LOG("Registered the target machine");
 }
 
 /// WDC65816TargetMachine ctor
@@ -69,4 +73,27 @@ bool WDC65816PassConfig::addInstSelector() {
 /// true if -print-machineinstrs should print out the code after the passes.
 bool WDC65816PassConfig::addPreEmitPass(){
     return false;
+}
+
+
+void llvm::logWDCMessage(const char *file, const char *function, unsigned int linenum, const char *format, ...)
+{
+    char timebuf[64];
+    va_list args;
+    struct timeval now;
+    const char *filename = strrchr(file, '/');
+    
+    if (filename != NULL)
+        filename++;
+    else
+        filename = file;
+    
+    gettimeofday(&now, NULL);
+    strftime(timebuf, sizeof(timebuf), "%T", localtime(&(now.tv_sec)));
+    
+    va_start(args, format);
+    fprintf(stderr, "| WDCLog | %s.%06u | %s:%u | %s | ", timebuf, now.tv_usec, filename, linenum, function);
+    vfprintf(stderr, format, args);
+    fprintf(stderr, " |\n");
+    va_end (args);
 }
