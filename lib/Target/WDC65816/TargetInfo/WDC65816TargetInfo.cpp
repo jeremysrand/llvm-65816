@@ -15,6 +15,7 @@ using namespace llvm;
 Target llvm::TheWDC65816Target;
 
 extern "C" void LLVMInitializeWDC65816TargetInfo() {
+    WDC_LOG("Registering the target");
     RegisterTarget<Triple::wdc65816, /*HasJIT=*/ false>
     X(TheWDC65816Target, "wdc65816", "WDC65816");
 }

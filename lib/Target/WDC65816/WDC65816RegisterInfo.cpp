@@ -57,7 +57,6 @@ WDC65816RegisterInfo::getRTCallPreservedMask(CallingConv::ID CC) const {
 
 BitVector WDC65816RegisterInfo::getReservedRegs(const MachineFunction &MF) const {
     BitVector Reserved(getNumRegs());
-    // FIXME: G1 reserved for now for large imm generation by frame code.
     Reserved.set(WDC::P);
     Reserved.set(WDC::S);
     Reserved.set(WDC::D);
@@ -78,9 +77,7 @@ unsigned WDC65816RegisterInfo::getFrameRegister(const MachineFunction &MF) const
 const TargetRegisterClass*
 WDC65816RegisterInfo::getPointerRegClass(const MachineFunction &MF,
                                       unsigned Kind) const {
-    // WDC_TODO - this is not a pointer reg actually.  This should end up being the
-    // 32-bit direct page registers which are not defined yet.
-    return &WDC::IndexRegsRegClass;
+    return &WDC::Int32RegsRegClass;
 }
 
 
@@ -89,6 +86,7 @@ WDC65816RegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
                                        int SPAdj, unsigned FIOperandNum,
                                        RegScavenger *RS) const {
     // WDC_TODO - Write something here...
+    WDC_LOG("Unimplemented method called");
 }
 
 #if 0 // TODO - How much of this stuff do I need?

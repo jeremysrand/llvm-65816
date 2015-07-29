@@ -87,18 +87,21 @@ namespace {
 void WDC65816AsmPrinter::printOperand(const MachineInstr *MI, int opNum,
                                       raw_ostream &O) {
     // WDC_TODO - print the operand here...
+    WDC_LOG("Unimplemented method called");
 }
 
 
 void WDC65816AsmPrinter::printMemOperand(const MachineInstr *MI, int opNum,
                                          raw_ostream &O, const char *Modifier) {
     // WDC_TODO - print the memory operand here...
+    WDC_LOG("Unimplemented method called");
 }
 
 
 bool WDC65816AsmPrinter::printGetPCX(const MachineInstr *MI, unsigned opNum,
                                      raw_ostream &O) {
     // WDC_TODO - print whatever this is here...
+    WDC_LOG("Unimplemented method called");
     return true;
 }
 
@@ -359,4 +362,5 @@ isBlockOnlyReachableByFallthrough(const MachineBasicBlock *MBB) const {
 // Force static initialization.
 extern "C" void LLVMInitializeWDC65816AsmPrinter() {
     RegisterAsmPrinter<WDC65816AsmPrinter> X(TheWDC65816Target);
+    WDC_LOG("Assembly printer registered");
 }

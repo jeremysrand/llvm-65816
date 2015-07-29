@@ -70,6 +70,7 @@ namespace {
 
 SDNode* WDC65816DAGToDAGISel::getGlobalBaseReg() {
     unsigned GlobalBaseReg = TM.getInstrInfo()->getGlobalBaseReg(MF);
+    WDC_LOG("This method is probably implemented wrong...");
     return CurDAG->getRegister(GlobalBaseReg,
                                getTargetLowering()->getPointerTy()).getNode();
 }
@@ -79,18 +80,21 @@ SDNode* WDC65816DAGToDAGISel::getGlobalBaseReg() {
 
 bool WDC65816DAGToDAGISel::SelectAbs(SDValue N, SDValue &R1) {
     // WDC_TODO - Write something here
+    WDC_LOG("Unimplemented method called");
     return false;
 }
 
 
 bool WDC65816DAGToDAGISel::SelectAbsLong(SDValue N, SDValue &R1) {
     // WDC_TODO - Write something here
+    WDC_LOG("Unimplemented method called");
     return false;
 }
 
 
 bool WDC65816DAGToDAGISel::SelectDirectPage(SDValue N, SDValue &R1) {
     // WDC_TODO - Write something here
+    WDC_LOG("Unimplemented method called");
     return false;
 }
 
@@ -166,6 +170,7 @@ bool SparcDAGToDAGISel::SelectADDRrr(SDValue Addr, SDValue &R1, SDValue &R2) {
 #endif
 
 SDNode *WDC65816DAGToDAGISel::Select(SDNode *N) {
+    WDC_LOG("Unimplemented method called");
     return NULL;
 #if 0 // WDC_TODO - we will definitely need something here
     SDLoc dl(N);
@@ -248,5 +253,6 @@ SparcDAGToDAGISel::SelectInlineAsmMemoryOperand(const SDValue &Op,
 /// WDC65816-specific DAG, ready for instruction scheduling.
 ///
 FunctionPass *llvm::createWDC65816ISelDag(WDC65816TargetMachine &TM) {
+    WDC_LOG("ISel DAG created");
     return new WDC65816DAGToDAGISel(TM);
 }

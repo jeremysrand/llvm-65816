@@ -13,6 +13,7 @@
 #ifndef WDC65816MACHINEFUNCTIONINFO_H
 #define WDC65816MACHINEFUNCTIONINFO_H
 
+#include "WDC65816.h"
 #include "llvm/CodeGen/MachineFunction.h"
 
 namespace llvm {
@@ -37,20 +38,27 @@ namespace llvm {
         
     public:
         WDC65816MachineFunctionInfo()
-        {}
+            : GlobalBaseReg(0) {}
 #if 0 // WDC_TODO - Disable these members for now
-        : GlobalBaseReg(0), VarArgsFrameOffset(0), SRetReturnReg(0),
+        , VarArgsFrameOffset(0), SRetReturnReg(0),
         IsLeafProc(false) {}
 #endif
         
         
-        unsigned getGlobalBaseReg() const { return GlobalBaseReg; }
-        void setGlobalBaseReg(unsigned Reg) { GlobalBaseReg = Reg; }
+        unsigned getGlobalBaseReg() const {
+            WDC_LOG("Returning %u", GlobalBaseReg);
+            return GlobalBaseReg;
+        }
+        
+        void setGlobalBaseReg(unsigned Reg) {
+            WDC_LOG("Setting global base register to %u", Reg);
+            GlobalBaseReg = Reg;
+        }
         
         explicit WDC65816MachineFunctionInfo(MachineFunction &MF)
-        {}
+            : GlobalBaseReg(0) {}
 #if 0 // WDC_TODO - Disable these members for now
-        : GlobalBaseReg(0), VarArgsFrameOffset(0), SRetReturnReg(0),
+        , VarArgsFrameOffset(0), SRetReturnReg(0),
         IsLeafProc(false) {}
 
         
