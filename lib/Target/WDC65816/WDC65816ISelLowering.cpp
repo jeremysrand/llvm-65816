@@ -1582,8 +1582,8 @@ WDC65816TargetLowering::WDC65816TargetLowering(TargetMachine &TM)
     
     setMinFunctionAlignment(2);
     
-    computeRegisterProperties();
 #endif
+    computeRegisterProperties();
 }
 
 #if 0 // WDC_TODO - Disable this stuff for now...
