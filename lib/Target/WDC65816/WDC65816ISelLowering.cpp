@@ -151,6 +151,30 @@ static bool CC_WDC6581664_Half(unsigned &ValNo, MVT &ValVT,
 
 #include "WDC65816GenCallingConv.inc"
 
+
+SDValue WDC65816TargetLowering::LowerFormalArguments(SDValue Chain,
+                     CallingConv::ID CallConv,
+                     bool IsVarArg,
+                     const SmallVectorImpl<ISD::InputArg> &Ins,
+                     SDLoc DL,
+                     SelectionDAG &DAG,
+                     SmallVectorImpl<SDValue> &InVals) const {
+    WDC_LOG("WDC_TODO - Not implemented yet!");
+    return Chain;
+}
+
+
+SDValue
+WDC65816TargetLowering::LowerReturn(SDValue Chain,
+                                    CallingConv::ID CallConv, bool IsVarArg,
+                                    const SmallVectorImpl<ISD::OutputArg> &Outs,
+                                    const SmallVectorImpl<SDValue> &OutVals,
+                                    SDLoc DL, SelectionDAG &DAG) const {
+    WDC_LOG("WDC_TODO - Not implemented yet!");
+    return Chain;
+}
+
+
 #if 0 // WDC_TODO - Get rid of this?
 // The calling conventions in WDC65816CallingConv.td are described in terms of the
 // callee's register window. This function translates registers to the
@@ -164,16 +188,6 @@ static unsigned toCallerWindow(unsigned Reg) {
 #endif
 
 #if 0 // WDC_TODO - Disable more stuff
-SDValue
-WDC65816TargetLowering::LowerReturn(SDValue Chain,
-                                 CallingConv::ID CallConv, bool IsVarArg,
-                                 const SmallVectorImpl<ISD::OutputArg> &Outs,
-                                 const SmallVectorImpl<SDValue> &OutVals,
-                                 SDLoc DL, SelectionDAG &DAG) const {
-    if (Subtarget->is64Bit())
-        return LowerReturn_64(Chain, CallConv, IsVarArg, Outs, OutVals, DL, DAG);
-    return LowerReturn_32(Chain, CallConv, IsVarArg, Outs, OutVals, DL, DAG);
-}
 
 SDValue
 WDC65816TargetLowering::LowerReturn_32(SDValue Chain,

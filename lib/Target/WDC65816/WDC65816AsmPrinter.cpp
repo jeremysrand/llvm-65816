@@ -86,22 +86,19 @@ namespace {
 
 void WDC65816AsmPrinter::printOperand(const MachineInstr *MI, int opNum,
                                       raw_ostream &O) {
-    // WDC_TODO - print the operand here...
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
 }
 
 
 void WDC65816AsmPrinter::printMemOperand(const MachineInstr *MI, int opNum,
                                          raw_ostream &O, const char *Modifier) {
-    // WDC_TODO - print the memory operand here...
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
 }
 
 
 bool WDC65816AsmPrinter::printGetPCX(const MachineInstr *MI, unsigned opNum,
                                      raw_ostream &O) {
-    // WDC_TODO - print whatever this is here...
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
     return true;
 }
 

@@ -85,8 +85,7 @@ void
 WDC65816RegisterInfo::eliminateFrameIndex(MachineBasicBlock::iterator II,
                                        int SPAdj, unsigned FIOperandNum,
                                        RegScavenger *RS) const {
-    // WDC_TODO - Write something here...
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
 }
 
 #if 0 // TODO - How much of this stuff do I need?

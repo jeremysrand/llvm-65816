@@ -57,6 +57,21 @@ namespace llvm {
     public:
         WDC65816TargetLowering(TargetMachine &TM);
         
+        virtual SDValue
+        LowerFormalArguments(SDValue Chain,
+                             CallingConv::ID CallConv,
+                             bool isVarArg,
+                             const SmallVectorImpl<ISD::InputArg> &Ins,
+                             SDLoc dl, SelectionDAG &DAG,
+                             SmallVectorImpl<SDValue> &InVals) const;
+        
+        virtual SDValue
+        LowerReturn(SDValue Chain,
+                    CallingConv::ID CallConv, bool isVarArg,
+                    const SmallVectorImpl<ISD::OutputArg> &Outs,
+                    const SmallVectorImpl<SDValue> &OutVals,
+                    SDLoc dl, SelectionDAG &DAG) const;
+        
 #if 0 // WDC_TODO - Do I need any of this?
         virtual SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const;
         
@@ -84,14 +99,6 @@ namespace llvm {
         
         /// getSetCCResultType - Return the ISD::SETCC ValueType
         virtual EVT getSetCCResultType(LLVMContext &Context, EVT VT) const;
-        
-        virtual SDValue
-        LowerFormalArguments(SDValue Chain,
-                             CallingConv::ID CallConv,
-                             bool isVarArg,
-                             const SmallVectorImpl<ISD::InputArg> &Ins,
-                             SDLoc dl, SelectionDAG &DAG,
-                             SmallVectorImpl<SDValue> &InVals) const;
         SDValue LowerFormalArguments_32(SDValue Chain,
                                         CallingConv::ID CallConv,
                                         bool isVarArg,
@@ -113,12 +120,6 @@ namespace llvm {
         SDValue LowerCall_64(TargetLowering::CallLoweringInfo &CLI,
                              SmallVectorImpl<SDValue> &InVals) const;
         
-        virtual SDValue
-        LowerReturn(SDValue Chain,
-                    CallingConv::ID CallConv, bool isVarArg,
-                    const SmallVectorImpl<ISD::OutputArg> &Outs,
-                    const SmallVectorImpl<SDValue> &OutVals,
-                    SDLoc dl, SelectionDAG &DAG) const;
         SDValue LowerReturn_32(SDValue Chain,
                                CallingConv::ID CallConv, bool IsVarArg,
                                const SmallVectorImpl<ISD::OutputArg> &Outs,

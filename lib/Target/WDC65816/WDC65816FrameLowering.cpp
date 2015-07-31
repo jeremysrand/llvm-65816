@@ -27,19 +27,19 @@ using namespace llvm;
 // hasFP - Whether or not there is a frame pointer.
 // WDC_TODO - for now we will say we always have a frame pointer.
 bool WDC65816FrameLowering::hasFP(const MachineFunction &MF) const {
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
     return true;
 }
 
 
 void WDC65816FrameLowering::emitPrologue(MachineFunction &MF) const {
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
 }
 
 
 void WDC65816FrameLowering::emitEpilogue(MachineFunction &MF,
                                          MachineBasicBlock &MBB) const {
-    WDC_LOG("Unimplemented method called");
+    WDC_LOG("WDC_TODO - Unimplemented method called");
 }
 
 
