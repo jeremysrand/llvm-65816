@@ -1310,6 +1310,13 @@ static SPCC::CondCodes FPCondCCodeToFCC(ISD::CondCode CC) {
 WDC65816TargetLowering::WDC65816TargetLowering(TargetMachine &TM)
 : TargetLowering(TM, new TargetLoweringObjectFileELF()) {
     
+    addRegisterClass(MVT::i16, &WDC::Int16RegsRegClass);
+    addRegisterClass(MVT::i32, &WDC::Int32RegsRegClass);
+    addRegisterClass(MVT::i64, &WDC::Int64RegsRegClass);
+    addRegisterClass(MVT::f32, &WDC::Float32RegsRegClass);
+    addRegisterClass(MVT::f64, &WDC::Float64RegsRegClass);
+    
+    computeRegisterProperties();
 #if 0 // WDC_TODO - For sure we need something here...
     // Set up the register classes.
     addRegisterClass(MVT::i32, &SP::IntRegsRegClass);
@@ -1583,7 +1590,6 @@ WDC65816TargetLowering::WDC65816TargetLowering(TargetMachine &TM)
     setMinFunctionAlignment(2);
     
 #endif
-    computeRegisterProperties();
 }
 
 #if 0 // WDC_TODO - Disable this stuff for now...
