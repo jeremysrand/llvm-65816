@@ -45,8 +45,6 @@ SDValue WDC65816TargetLowering::LowerFormalArguments(SDValue Chain,
                      SDLoc DL,
                      SelectionDAG &DAG,
                      SmallVectorImpl<SDValue> &InVals) const {
-    WDC_LOG("WDC_TODO - Not fully implemented yet!");
-    
     MachineFunction &MF = DAG.getMachineFunction();
     MachineRegisterInfo &RegInfo = MF.getRegInfo();
     WDC65816MachineFunctionInfo *FuncInfo = MF.getInfo<WDC65816MachineFunctionInfo>();
@@ -56,6 +54,43 @@ SDValue WDC65816TargetLowering::LowerFormalArguments(SDValue Chain,
     CCState CCInfo(CallConv, isVarArg, DAG.getMachineFunction(),
                    getTargetMachine(), ArgLocs, *DAG.getContext());
     CCInfo.AnalyzeFormalArguments(Ins, CC_WDC);
+    
+    for (unsigned i = 0, e = ArgLocs.size(); i != e; ++i) {
+        CCValAssign &VA = ArgLocs[i];
+        
+        if (i == 0 && Ins[i].Flags.isSRet()) {
+            WDC_LOG("WDC_TODO - Write code for returning a structure as a hidden input arg pointer");
+            continue;
+        }
+        
+        if (VA.isRegLoc()) {
+            if (VA.needsCustom()) {
+                WDC_LOG("WDC_TODO - needsCustom() in register location!");
+                continue;
+            }
+            WDC_LOG("WDC_TODO - Write code for register location");
+            continue;
+        }
+        
+        assert(VA.isMemLoc());
+        
+        unsigned Offset = VA.getLocMemOffset();
+        
+        if (VA.needsCustom()) {
+            WDC_LOG("WDC_TODO - needsCustom() in memory location, offset=%u!", Offset);
+            continue;
+        }
+        
+        WDC_LOG("WDC_TODO - Write code for memory location, offset=%u", Offset);
+    }
+    
+    if (MF.getFunction()->hasStructRetAttr()) {
+        WDC_LOG("WDC_TODO - Write code for hasStructRetAttr()");
+    }
+    
+    if (isVarArg) {
+        WDC_LOG("WDC_TODO - Write code for isVarArg");
+    }
     
     return Chain;
 }
@@ -67,8 +102,47 @@ WDC65816TargetLowering::LowerReturn(SDValue Chain,
                                     const SmallVectorImpl<ISD::OutputArg> &Outs,
                                     const SmallVectorImpl<SDValue> &OutVals,
                                     SDLoc DL, SelectionDAG &DAG) const {
-    WDC_LOG("WDC_TODO - Not implemented yet!");
-    return Chain;
+    MachineFunction &MF = DAG.getMachineFunction();
+    
+    // CCValAssign - represent the assignment of the return value to locations.
+    SmallVector<CCValAssign, 16> RVLocs;
+    
+    // CCState - Info about the registers and stack slot.
+    CCState CCInfo(CallConv, IsVarArg, DAG.getMachineFunction(),
+                   DAG.getTarget(), RVLocs, *DAG.getContext());
+    
+    // Analyze return values.
+    CCInfo.AnalyzeReturn(Outs, RetCC_WDC);
+    
+    SDValue Flag;
+    SmallVector<SDValue, 4> RetOps(1, Chain);
+    
+    // Copy the result values into the output registers.
+    for (unsigned i = 0; i != RVLocs.size(); ++i) {
+        CCValAssign &VA = RVLocs[i];
+        assert(VA.isRegLoc() && "Can only return in registers!");
+        
+        Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(),
+                                 OutVals[i], Flag);
+        
+        // Guarantee that all emitted copies are stuck together with flags.
+        Flag = Chain.getValue(1);
+        RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
+    }
+    
+    // If the function returns a struct, copy the SRetReturnReg to I0
+    if (MF.getFunction()->hasStructRetAttr()) {
+        WDC_LOG("WDC_TODO - Need to implement hasStructRetAttr() case");
+    }
+    
+    RetOps[0] = Chain;  // Update chain.
+    
+    // Add the flag if we have it.
+    if (Flag.getNode())
+        RetOps.push_back(Flag);
+    
+    return DAG.getNode(WDCISD::RET_FLAG, DL, MVT::Other,
+                       &RetOps[0], RetOps.size());
 }
 
 
@@ -86,475 +160,6 @@ static unsigned toCallerWindow(unsigned Reg) {
 
 #if 0 // WDC_TODO - Disable more stuff
 
-SDValue
-WDC65816TargetLowering::LowerReturn_32(SDValue Chain,
-                                    CallingConv::ID CallConv, bool IsVarArg,
-                                    const SmallVectorImpl<ISD::OutputArg> &Outs,
-                                    const SmallVectorImpl<SDValue> &OutVals,
-                                    SDLoc DL, SelectionDAG &DAG) const {
-    MachineFunction &MF = DAG.getMachineFunction();
-    
-    // CCValAssign - represent the assignment of the return value to locations.
-    SmallVector<CCValAssign, 16> RVLocs;
-    
-    // CCState - Info about the registers and stack slot.
-    CCState CCInfo(CallConv, IsVarArg, DAG.getMachineFunction(),
-                   DAG.getTarget(), RVLocs, *DAG.getContext());
-    
-    // Analyze return values.
-    CCInfo.AnalyzeReturn(Outs, RetCC_WDC6581632);
-    
-    SDValue Flag;
-    SmallVector<SDValue, 4> RetOps(1, Chain);
-    // Make room for the return address offset.
-    RetOps.push_back(SDValue());
-    
-    // Copy the result values into the output registers.
-    for (unsigned i = 0; i != RVLocs.size(); ++i) {
-        CCValAssign &VA = RVLocs[i];
-        assert(VA.isRegLoc() && "Can only return in registers!");
-        
-        Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(),
-                                 OutVals[i], Flag);
-        
-        // Guarantee that all emitted copies are stuck together with flags.
-        Flag = Chain.getValue(1);
-        RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
-    }
-    
-    unsigned RetAddrOffset = 8; // Call Inst + Delay Slot
-    // If the function returns a struct, copy the SRetReturnReg to I0
-    if (MF.getFunction()->hasStructRetAttr()) {
-        WDC65816MachineFunctionInfo *SFI = MF.getInfo<WDC65816MachineFunctionInfo>();
-        unsigned Reg = SFI->getSRetReturnReg();
-        if (!Reg)
-            llvm_unreachable("sret virtual register not created in the entry block");
-        SDValue Val = DAG.getCopyFromReg(Chain, DL, Reg, getPointerTy());
-        Chain = DAG.getCopyToReg(Chain, DL, SP::I0, Val, Flag);
-        Flag = Chain.getValue(1);
-        RetOps.push_back(DAG.getRegister(SP::I0, getPointerTy()));
-        RetAddrOffset = 12; // CallInst + Delay Slot + Unimp
-    }
-    
-    RetOps[0] = Chain;  // Update chain.
-    RetOps[1] = DAG.getConstant(RetAddrOffset, MVT::i32);
-    
-    // Add the flag if we have it.
-    if (Flag.getNode())
-        RetOps.push_back(Flag);
-    
-    return DAG.getNode(SPISD::RET_FLAG, DL, MVT::Other,
-                       &RetOps[0], RetOps.size());
-}
-
-// Lower return values for the 64-bit ABI.
-// Return values are passed the exactly the same way as function arguments.
-SDValue
-WDC65816TargetLowering::LowerReturn_64(SDValue Chain,
-                                    CallingConv::ID CallConv, bool IsVarArg,
-                                    const SmallVectorImpl<ISD::OutputArg> &Outs,
-                                    const SmallVectorImpl<SDValue> &OutVals,
-                                    SDLoc DL, SelectionDAG &DAG) const {
-    // CCValAssign - represent the assignment of the return value to locations.
-    SmallVector<CCValAssign, 16> RVLocs;
-    
-    // CCState - Info about the registers and stack slot.
-    CCState CCInfo(CallConv, IsVarArg, DAG.getMachineFunction(),
-                   DAG.getTarget(), RVLocs, *DAG.getContext());
-    
-    // Analyze return values.
-    CCInfo.AnalyzeReturn(Outs, CC_WDC6581664);
-    
-    SDValue Flag;
-    SmallVector<SDValue, 4> RetOps(1, Chain);
-    
-    // The second operand on the return instruction is the return address offset.
-    // The return address is always %i7+8 with the 64-bit ABI.
-    RetOps.push_back(DAG.getConstant(8, MVT::i32));
-    
-    // Copy the result values into the output registers.
-    for (unsigned i = 0; i != RVLocs.size(); ++i) {
-        CCValAssign &VA = RVLocs[i];
-        assert(VA.isRegLoc() && "Can only return in registers!");
-        SDValue OutVal = OutVals[i];
-        
-        // Integer return values must be sign or zero extended by the callee.
-        switch (VA.getLocInfo()) {
-            case CCValAssign::SExt:
-                OutVal = DAG.getNode(ISD::SIGN_EXTEND, DL, VA.getLocVT(), OutVal);
-                break;
-            case CCValAssign::ZExt:
-                OutVal = DAG.getNode(ISD::ZERO_EXTEND, DL, VA.getLocVT(), OutVal);
-                break;
-            case CCValAssign::AExt:
-                OutVal = DAG.getNode(ISD::ANY_EXTEND, DL, VA.getLocVT(), OutVal);
-            default:
-                break;
-        }
-        
-        // The custom bit on an i32 return value indicates that it should be passed
-        // in the high bits of the register.
-        if (VA.getValVT() == MVT::i32 && VA.needsCustom()) {
-            OutVal = DAG.getNode(ISD::SHL, DL, MVT::i64, OutVal,
-                                 DAG.getConstant(32, MVT::i32));
-            
-            // The next value may go in the low bits of the same register.
-            // Handle both at once.
-            if (i+1 < RVLocs.size() && RVLocs[i+1].getLocReg() == VA.getLocReg()) {
-                SDValue NV = DAG.getNode(ISD::ZERO_EXTEND, DL, MVT::i64, OutVals[i+1]);
-                OutVal = DAG.getNode(ISD::OR, DL, MVT::i64, OutVal, NV);
-                // Skip the next value, it's already done.
-                ++i;
-            }
-        }
-        
-        Chain = DAG.getCopyToReg(Chain, DL, VA.getLocReg(), OutVal, Flag);
-        
-        // Guarantee that all emitted copies are stuck together with flags.
-        Flag = Chain.getValue(1);
-        RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
-    }
-    
-    RetOps[0] = Chain;  // Update chain.
-    
-    // Add the flag if we have it.
-    if (Flag.getNode())
-        RetOps.push_back(Flag);
-    
-    return DAG.getNode(SPISD::RET_FLAG, DL, MVT::Other,
-                       &RetOps[0], RetOps.size());
-}
-
-SDValue WDC65816TargetLowering::
-LowerFormalArguments(SDValue Chain,
-                     CallingConv::ID CallConv,
-                     bool IsVarArg,
-                     const SmallVectorImpl<ISD::InputArg> &Ins,
-                     SDLoc DL,
-                     SelectionDAG &DAG,
-                     SmallVectorImpl<SDValue> &InVals) const {
-    if (Subtarget->is64Bit())
-        return LowerFormalArguments_64(Chain, CallConv, IsVarArg, Ins,
-                                       DL, DAG, InVals);
-    return LowerFormalArguments_32(Chain, CallConv, IsVarArg, Ins,
-                                   DL, DAG, InVals);
-}
-
-/// LowerFormalArguments32 - V8 uses a very simple ABI, where all values are
-/// passed in either one or two GPRs, including FP values.  TODO: we should
-/// pass FP values in FP registers for fastcc functions.
-SDValue WDC65816TargetLowering::
-LowerFormalArguments_32(SDValue Chain,
-                        CallingConv::ID CallConv,
-                        bool isVarArg,
-                        const SmallVectorImpl<ISD::InputArg> &Ins,
-                        SDLoc dl,
-                        SelectionDAG &DAG,
-                        SmallVectorImpl<SDValue> &InVals) const {
-    MachineFunction &MF = DAG.getMachineFunction();
-    MachineRegisterInfo &RegInfo = MF.getRegInfo();
-    WDC65816MachineFunctionInfo *FuncInfo = MF.getInfo<WDC65816MachineFunctionInfo>();
-    
-    // Assign locations to all of the incoming arguments.
-    SmallVector<CCValAssign, 16> ArgLocs;
-    CCState CCInfo(CallConv, isVarArg, DAG.getMachineFunction(),
-                   getTargetMachine(), ArgLocs, *DAG.getContext());
-    CCInfo.AnalyzeFormalArguments(Ins, CC_WDC6581632);
-    
-    const unsigned StackOffset = 92;
-    
-    for (unsigned i = 0, e = ArgLocs.size(); i != e; ++i) {
-        CCValAssign &VA = ArgLocs[i];
-        
-        if (i == 0  && Ins[i].Flags.isSRet()) {
-            // Get SRet from [%fp+64].
-            int FrameIdx = MF.getFrameInfo()->CreateFixedObject(4, 64, true);
-            SDValue FIPtr = DAG.getFrameIndex(FrameIdx, MVT::i32);
-            SDValue Arg = DAG.getLoad(MVT::i32, dl, Chain, FIPtr,
-                                      MachinePointerInfo(),
-                                      false, false, false, 0);
-            InVals.push_back(Arg);
-            continue;
-        }
-        
-        if (VA.isRegLoc()) {
-            if (VA.needsCustom()) {
-                assert(VA.getLocVT() == MVT::f64);
-                unsigned VRegHi = RegInfo.createVirtualRegister(&SP::IntRegsRegClass);
-                MF.getRegInfo().addLiveIn(VA.getLocReg(), VRegHi);
-                SDValue HiVal = DAG.getCopyFromReg(Chain, dl, VRegHi, MVT::i32);
-                
-                assert(i+1 < e);
-                CCValAssign &NextVA = ArgLocs[++i];
-                
-                SDValue LoVal;
-                if (NextVA.isMemLoc()) {
-                    int FrameIdx = MF.getFrameInfo()->
-                    CreateFixedObject(4, StackOffset+NextVA.getLocMemOffset(),true);
-                    SDValue FIPtr = DAG.getFrameIndex(FrameIdx, MVT::i32);
-                    LoVal = DAG.getLoad(MVT::i32, dl, Chain, FIPtr,
-                                        MachinePointerInfo(),
-                                        false, false, false, 0);
-                } else {
-                    unsigned loReg = MF.addLiveIn(NextVA.getLocReg(),
-                                                  &SP::IntRegsRegClass);
-                    LoVal = DAG.getCopyFromReg(Chain, dl, loReg, MVT::i32);
-                }
-                SDValue WholeValue =
-                DAG.getNode(ISD::BUILD_PAIR, dl, MVT::i64, LoVal, HiVal);
-                WholeValue = DAG.getNode(ISD::BITCAST, dl, MVT::f64, WholeValue);
-                InVals.push_back(WholeValue);
-                continue;
-            }
-            unsigned VReg = RegInfo.createVirtualRegister(&SP::IntRegsRegClass);
-            MF.getRegInfo().addLiveIn(VA.getLocReg(), VReg);
-            SDValue Arg = DAG.getCopyFromReg(Chain, dl, VReg, MVT::i32);
-            if (VA.getLocVT() == MVT::f32)
-                Arg = DAG.getNode(ISD::BITCAST, dl, MVT::f32, Arg);
-            else if (VA.getLocVT() != MVT::i32) {
-                Arg = DAG.getNode(ISD::AssertSext, dl, MVT::i32, Arg,
-                                  DAG.getValueType(VA.getLocVT()));
-                Arg = DAG.getNode(ISD::TRUNCATE, dl, VA.getLocVT(), Arg);
-            }
-            InVals.push_back(Arg);
-            continue;
-        }
-        
-        assert(VA.isMemLoc());
-        
-        unsigned Offset = VA.getLocMemOffset()+StackOffset;
-        
-        if (VA.needsCustom()) {
-            assert(VA.getValVT() == MVT::f64);
-            // If it is double-word aligned, just load.
-            if (Offset % 8 == 0) {
-                int FI = MF.getFrameInfo()->CreateFixedObject(8,
-                                                              Offset,
-                                                              true);
-                SDValue FIPtr = DAG.getFrameIndex(FI, getPointerTy());
-                SDValue Load = DAG.getLoad(VA.getValVT(), dl, Chain, FIPtr,
-                                           MachinePointerInfo(),
-                                           false,false, false, 0);
-                InVals.push_back(Load);
-                continue;
-            }
-            
-            int FI = MF.getFrameInfo()->CreateFixedObject(4,
-                                                          Offset,
-                                                          true);
-            SDValue FIPtr = DAG.getFrameIndex(FI, getPointerTy());
-            SDValue HiVal = DAG.getLoad(MVT::i32, dl, Chain, FIPtr,
-                                        MachinePointerInfo(),
-                                        false, false, false, 0);
-            int FI2 = MF.getFrameInfo()->CreateFixedObject(4,
-                                                           Offset+4,
-                                                           true);
-            SDValue FIPtr2 = DAG.getFrameIndex(FI2, getPointerTy());
-            
-            SDValue LoVal = DAG.getLoad(MVT::i32, dl, Chain, FIPtr2,
-                                        MachinePointerInfo(),
-                                        false, false, false, 0);
-            
-            SDValue WholeValue =
-            DAG.getNode(ISD::BUILD_PAIR, dl, MVT::i64, LoVal, HiVal);
-            WholeValue = DAG.getNode(ISD::BITCAST, dl, MVT::f64, WholeValue);
-            InVals.push_back(WholeValue);
-            continue;
-        }
-        
-        int FI = MF.getFrameInfo()->CreateFixedObject(4,
-                                                      Offset,
-                                                      true);
-        SDValue FIPtr = DAG.getFrameIndex(FI, getPointerTy());
-        SDValue Load ;
-        if (VA.getValVT() == MVT::i32 || VA.getValVT() == MVT::f32) {
-            Load = DAG.getLoad(VA.getValVT(), dl, Chain, FIPtr,
-                               MachinePointerInfo(),
-                               false, false, false, 0);
-        } else {
-            ISD::LoadExtType LoadOp = ISD::SEXTLOAD;
-            // WDC65816 is big endian, so add an offset based on the ObjectVT.
-            unsigned Offset = 4-std::max(1U, VA.getValVT().getSizeInBits()/8);
-            FIPtr = DAG.getNode(ISD::ADD, dl, MVT::i32, FIPtr,
-                                DAG.getConstant(Offset, MVT::i32));
-            Load = DAG.getExtLoad(LoadOp, dl, MVT::i32, Chain, FIPtr,
-                                  MachinePointerInfo(),
-                                  VA.getValVT(), false, false,0);
-            Load = DAG.getNode(ISD::TRUNCATE, dl, VA.getValVT(), Load);
-        }
-        InVals.push_back(Load);
-    }
-    
-    if (MF.getFunction()->hasStructRetAttr()) {
-        // Copy the SRet Argument to SRetReturnReg.
-        WDC65816MachineFunctionInfo *SFI = MF.getInfo<WDC65816MachineFunctionInfo>();
-        unsigned Reg = SFI->getSRetReturnReg();
-        if (!Reg) {
-            Reg = MF.getRegInfo().createVirtualRegister(&SP::IntRegsRegClass);
-            SFI->setSRetReturnReg(Reg);
-        }
-        SDValue Copy = DAG.getCopyToReg(DAG.getEntryNode(), dl, Reg, InVals[0]);
-        Chain = DAG.getNode(ISD::TokenFactor, dl, MVT::Other, Copy, Chain);
-    }
-    
-    // Store remaining ArgRegs to the stack if this is a varargs function.
-    if (isVarArg) {
-        static const uint16_t ArgRegs[] = {
-            SP::I0, SP::I1, SP::I2, SP::I3, SP::I4, SP::I5
-        };
-        unsigned NumAllocated = CCInfo.getFirstUnallocated(ArgRegs, 6);
-        const uint16_t *CurArgReg = ArgRegs+NumAllocated, *ArgRegEnd = ArgRegs+6;
-        unsigned ArgOffset = CCInfo.getNextStackOffset();
-        if (NumAllocated == 6)
-            ArgOffset += StackOffset;
-        else {
-            assert(!ArgOffset);
-            ArgOffset = 68+4*NumAllocated;
-        }
-        
-        // Remember the vararg offset for the va_start implementation.
-        FuncInfo->setVarArgsFrameOffset(ArgOffset);
-        
-        std::vector<SDValue> OutChains;
-        
-        for (; CurArgReg != ArgRegEnd; ++CurArgReg) {
-            unsigned VReg = RegInfo.createVirtualRegister(&SP::IntRegsRegClass);
-            MF.getRegInfo().addLiveIn(*CurArgReg, VReg);
-            SDValue Arg = DAG.getCopyFromReg(DAG.getRoot(), dl, VReg, MVT::i32);
-            
-            int FrameIdx = MF.getFrameInfo()->CreateFixedObject(4, ArgOffset,
-                                                                true);
-            SDValue FIPtr = DAG.getFrameIndex(FrameIdx, MVT::i32);
-            
-            OutChains.push_back(DAG.getStore(DAG.getRoot(), dl, Arg, FIPtr,
-                                             MachinePointerInfo(),
-                                             false, false, 0));
-            ArgOffset += 4;
-        }
-        
-        if (!OutChains.empty()) {
-            OutChains.push_back(Chain);
-            Chain = DAG.getNode(ISD::TokenFactor, dl, MVT::Other,
-                                &OutChains[0], OutChains.size());
-        }
-    }
-    
-    return Chain;
-}
-
-// Lower formal arguments for the 64 bit ABI.
-SDValue WDC65816TargetLowering::
-LowerFormalArguments_64(SDValue Chain,
-                        CallingConv::ID CallConv,
-                        bool IsVarArg,
-                        const SmallVectorImpl<ISD::InputArg> &Ins,
-                        SDLoc DL,
-                        SelectionDAG &DAG,
-                        SmallVectorImpl<SDValue> &InVals) const {
-    MachineFunction &MF = DAG.getMachineFunction();
-    
-    // Analyze arguments according to CC_WDC6581664.
-    SmallVector<CCValAssign, 16> ArgLocs;
-    CCState CCInfo(CallConv, IsVarArg, DAG.getMachineFunction(),
-                   getTargetMachine(), ArgLocs, *DAG.getContext());
-    CCInfo.AnalyzeFormalArguments(Ins, CC_WDC6581664);
-    
-    // The argument array begins at %fp+BIAS+128, after the register save area.
-    const unsigned ArgArea = 128;
-    
-    for (unsigned i = 0, e = ArgLocs.size(); i != e; ++i) {
-        CCValAssign &VA = ArgLocs[i];
-        if (VA.isRegLoc()) {
-            // This argument is passed in a register.
-            // All integer register arguments are promoted by the caller to i64.
-            
-            // Create a virtual register for the promoted live-in value.
-            unsigned VReg = MF.addLiveIn(VA.getLocReg(),
-                                         getRegClassFor(VA.getLocVT()));
-            SDValue Arg = DAG.getCopyFromReg(Chain, DL, VReg, VA.getLocVT());
-            
-            // Get the high bits for i32 struct elements.
-            if (VA.getValVT() == MVT::i32 && VA.needsCustom())
-                Arg = DAG.getNode(ISD::SRL, DL, VA.getLocVT(), Arg,
-                                  DAG.getConstant(32, MVT::i32));
-            
-            // The caller promoted the argument, so insert an Assert?ext SDNode so we
-            // won't promote the value again in this function.
-            switch (VA.getLocInfo()) {
-                case CCValAssign::SExt:
-                    Arg = DAG.getNode(ISD::AssertSext, DL, VA.getLocVT(), Arg,
-                                      DAG.getValueType(VA.getValVT()));
-                    break;
-                case CCValAssign::ZExt:
-                    Arg = DAG.getNode(ISD::AssertZext, DL, VA.getLocVT(), Arg,
-                                      DAG.getValueType(VA.getValVT()));
-                    break;
-                default:
-                    break;
-            }
-            
-            // Truncate the register down to the argument type.
-            if (VA.isExtInLoc())
-                Arg = DAG.getNode(ISD::TRUNCATE, DL, VA.getValVT(), Arg);
-            
-            InVals.push_back(Arg);
-            continue;
-        }
-        
-        // The registers are exhausted. This argument was passed on the stack.
-        assert(VA.isMemLoc());
-        // The CC_WDC6581664_Full/Half functions compute stack offsets relative to the
-        // beginning of the arguments area at %fp+BIAS+128.
-        unsigned Offset = VA.getLocMemOffset() + ArgArea;
-        unsigned ValSize = VA.getValVT().getSizeInBits() / 8;
-        // Adjust offset for extended arguments, WDC65816 is big-endian.
-        // The caller will have written the full slot with extended bytes, but we
-        // prefer our own extending loads.
-        if (VA.isExtInLoc())
-            Offset += 8 - ValSize;
-        int FI = MF.getFrameInfo()->CreateFixedObject(ValSize, Offset, true);
-        InVals.push_back(DAG.getLoad(VA.getValVT(), DL, Chain,
-                                     DAG.getFrameIndex(FI, getPointerTy()),
-                                     MachinePointerInfo::getFixedStack(FI),
-                                     false, false, false, 0));
-    }
-    
-    if (!IsVarArg)
-        return Chain;
-    
-    // This function takes variable arguments, some of which may have been passed
-    // in registers %i0-%i5. Variable floating point arguments are never passed
-    // in floating point registers. They go on %i0-%i5 or on the stack like
-    // integer arguments.
-    //
-    // The va_start intrinsic needs to know the offset to the first variable
-    // argument.
-    unsigned ArgOffset = CCInfo.getNextStackOffset();
-    WDC65816MachineFunctionInfo *FuncInfo = MF.getInfo<WDC65816MachineFunctionInfo>();
-    // Skip the 128 bytes of register save area.
-    FuncInfo->setVarArgsFrameOffset(ArgOffset + ArgArea +
-                                    Subtarget->getStackPointerBias());
-    
-    // Save the variable arguments that were passed in registers.
-    // The caller is required to reserve stack space for 6 arguments regardless
-    // of how many arguments were actually passed.
-    SmallVector<SDValue, 8> OutChains;
-    for (; ArgOffset < 6*8; ArgOffset += 8) {
-        unsigned VReg = MF.addLiveIn(SP::I0 + ArgOffset/8, &SP::I64RegsRegClass);
-        SDValue VArg = DAG.getCopyFromReg(Chain, DL, VReg, MVT::i64);
-        int FI = MF.getFrameInfo()->CreateFixedObject(8, ArgOffset + ArgArea, true);
-        OutChains.push_back(DAG.getStore(Chain, DL, VArg,
-                                         DAG.getFrameIndex(FI, getPointerTy()),
-                                         MachinePointerInfo::getFixedStack(FI),
-                                         false, false, 0));
-    }
-    
-    if (!OutChains.empty())
-        Chain = DAG.getNode(ISD::TokenFactor, DL, MVT::Other,
-                            &OutChains[0], OutChains.size());
-    
-    return Chain;
-}
 
 SDValue
 WDC65816TargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,

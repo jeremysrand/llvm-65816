@@ -20,10 +20,11 @@
 
 namespace llvm {
     class WDC65816Subtarget;
-#if 0 // WDC_TODO - Do I need any of this?
-    namespace SPISD {
+    namespace WDCISD {
         enum {
             FIRST_NUMBER = ISD::BUILTIN_OP_END,
+            RET_FLAG,    // Return with a flag operand.
+#if 0
             CMPICC,      // Compare two GPR operands, set icc+xcc.
             CMPFCC,      // Compare two FP operands, set fcc.
             BRICC,       // Branch to dest on icc condition
@@ -41,16 +42,15 @@ namespace llvm {
             XTOF,        // Int64 to FP within a FP register.
             
             CALL,        // A call instruction.
-            RET_FLAG,    // Return with a flag operand.
             GLOBAL_BASE_REG, // Global base reg for PIC.
             FLUSHW,      // FLUSH register windows to stack.
             
             TLS_ADD,     // For Thread Local Storage (TLS).
             TLS_LD,
             TLS_CALL
+#endif
         };
     }
-#endif
     
     class WDC65816TargetLowering : public TargetLowering {
         const WDC65816Subtarget *Subtarget;

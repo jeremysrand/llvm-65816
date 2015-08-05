@@ -100,6 +100,8 @@ let Defs = [S], Uses = [S] in {
         [(callseq_end timm:$amt1, timm:$amt2)]>;
 }
 
+def WDCRET             : SDNode<"WDCISD::RET_FLAG", SDTNone, [SDNPHasChain, SDNPOptInGlue, SDNPVariadic]>;
+
 // Group #1 Instructions
 
 // JSR TODO - Need to set all of the DAG patterns
@@ -1248,11 +1250,12 @@ def RTI : Group3<OpGrp3RTI,
                   (outs ), (ins ),
                   "RTI",
                   []>;
-
+let isReturn = 1, isTerminator = 1, isBarrier = 1 in {
 def RTL : Group3<OpGrp3RTL,
                   (outs ), (ins ),
                   "RTL",
-                  []>;
+                  [(WDCRET)]>;
+}
 
 def RTS : Group3<OpGrp3RTS,
                   (outs ), (ins ),
