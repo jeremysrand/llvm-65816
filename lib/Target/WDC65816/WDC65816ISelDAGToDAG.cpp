@@ -167,9 +167,7 @@ bool SparcDAGToDAGISel::SelectADDRrr(SDValue Addr, SDValue &R1, SDValue &R2) {
 #endif
 
 SDNode *WDC65816DAGToDAGISel::Select(SDNode *N) {
-    WDC_LOG("WDC_TODO - Unimplemented method called");
-    return NULL;
-#if 0 // WDC_TODO - we will definitely need something here
+    WDC_LOG("WDC_TODO - Unimplemented method called, opcode=%s", N->getOperationName().c_str());
     SDLoc dl(N);
     if (N->isMachineOpcode()) {
         N->setNodeId(-1);
@@ -178,6 +176,8 @@ SDNode *WDC65816DAGToDAGISel::Select(SDNode *N) {
     
     switch (N->getOpcode()) {
         default: break;
+            
+#if 0 // WDC_TODO - Do I need any of this
         case SPISD::GLOBAL_BASE_REG:
             return getGlobalBaseReg();
             
@@ -217,10 +217,10 @@ SDNode *WDC65816DAGToDAGISel::Select(SDNode *N) {
             // The high part is in the Y register.
             return CurDAG->SelectNodeTo(N, SP::RDY, MVT::i32, SDValue(Mul, 1));
         }
+#endif
     }
     
     return SelectCode(N);
-#endif
 }
 
 

@@ -19,11 +19,10 @@
 #include "llvm/Target/TargetLowering.h"
 
 namespace llvm {
-    class WDC65816Subtarget;
     namespace WDCISD {
         enum {
             FIRST_NUMBER = ISD::BUILTIN_OP_END,
-            RET_FLAG,    // Return with a flag operand.
+            RET_FLAG     // Return with a flag operand.
 #if 0
             CMPICC,      // Compare two GPR operands, set icc+xcc.
             CMPFCC,      // Compare two FP operands, set fcc.
@@ -53,7 +52,6 @@ namespace llvm {
     }
     
     class WDC65816TargetLowering : public TargetLowering {
-        const WDC65816Subtarget *Subtarget;
     public:
         WDC65816TargetLowering(TargetMachine &TM);
         

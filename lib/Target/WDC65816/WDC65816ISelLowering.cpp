@@ -46,8 +46,6 @@ SDValue WDC65816TargetLowering::LowerFormalArguments(SDValue Chain,
                      SelectionDAG &DAG,
                      SmallVectorImpl<SDValue> &InVals) const {
     MachineFunction &MF = DAG.getMachineFunction();
-    MachineRegisterInfo &RegInfo = MF.getRegInfo();
-    WDC65816MachineFunctionInfo *FuncInfo = MF.getInfo<WDC65816MachineFunctionInfo>();
     
     // Assign locations to all of the incoming arguments.
     SmallVector<CCValAssign, 16> ArgLocs;
@@ -130,7 +128,6 @@ WDC65816TargetLowering::LowerReturn(SDValue Chain,
         RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
     }
     
-    // If the function returns a struct, copy the SRetReturnReg to I0
     if (MF.getFunction()->hasStructRetAttr()) {
         WDC_LOG("WDC_TODO - Need to implement hasStructRetAttr() case");
     }
@@ -144,19 +141,6 @@ WDC65816TargetLowering::LowerReturn(SDValue Chain,
     return DAG.getNode(WDCISD::RET_FLAG, DL, MVT::Other,
                        &RetOps[0], RetOps.size());
 }
-
-
-#if 0 // WDC_TODO - Get rid of this?
-// The calling conventions in WDC65816CallingConv.td are described in terms of the
-// callee's register window. This function translates registers to the
-// corresponding caller window %o register.
-static unsigned toCallerWindow(unsigned Reg) {
-    assert(SP::I0 + 7 == SP::I7 && SP::O0 + 7 == SP::O7 && "Unexpected enum");
-    if (Reg >= SP::I0 && Reg <= SP::I7)
-        return Reg - SP::I0 + SP::O0;
-    return Reg;
-}
-#endif
 
 #if 0 // WDC_TODO - Disable more stuff
 
