@@ -5542,13 +5542,20 @@ namespace {
     public:
         WDC65816TargetInfo(const llvm::Triple &Triple) : TargetInfo(Triple) {
             BigEndian = false;
-            NoAsmVariants = true;
-            LongLongAlign = 8;
+            TLSSupported = false;
+            PointerWidth = 32; PointerAlign = 8;
+            IntWidth = 16; IntAlign = 8;
+            FloatWidth  = 32; FloatAlign = 8;
+            DoubleWidth = 64; DoubleAlign = 8;
+            LongWidth = 32; LongAlign = 8;
+            LongLongWidth = 64; LongLongAlign = 8;
             SuitableAlign = 8;
-            DoubleAlign = LongDoubleAlign = 8;
+
+            NoAsmVariants = true;
+
             SizeType = UnsignedLong;
             PtrDiffType = SignedLong;
-            IntPtrType = UnsignedLong;
+            IntPtrType = SignedLong;
             WCharType = UnsignedChar;
             WIntType = UnsignedInt;
             UseZeroLengthBitfieldAlignment = true;

@@ -4643,6 +4643,28 @@ void MSP430TargetCodeGenInfo::SetTargetAttributes(const Decl *D,
 }
 
 //===----------------------------------------------------------------------===//
+// WDC65816 ABI Implementation
+//===----------------------------------------------------------------------===//
+
+namespace {
+    
+    class WDC65816TargetCodeGenInfo : public TargetCodeGenInfo {
+    public:
+        WDC65816TargetCodeGenInfo(CodeGenTypes &CGT)
+        : TargetCodeGenInfo(new DefaultABIInfo(CGT)) {}
+        void SetTargetAttributes(const Decl *D, llvm::GlobalValue *GV,
+                                 CodeGen::CodeGenModule &M) const;
+    };
+    
+}
+
+void WDC65816TargetCodeGenInfo::SetTargetAttributes(const Decl *D,
+                                                  llvm::GlobalValue *GV,
+                                                  CodeGen::CodeGenModule &M) const {
+    // WDC_TODO - Do I need anything here?
+}
+
+//===----------------------------------------------------------------------===//
 // MIPS ABI Implementation.  This works for both little-endian and
 // big-endian variants.
 //===----------------------------------------------------------------------===//
@@ -5564,6 +5586,9 @@ const TargetCodeGenInfo &CodeGenModule::getTargetCodeGenInfo() {
 
   case llvm::Triple::msp430:
     return *(TheTargetCodeGenInfo = new MSP430TargetCodeGenInfo(Types));
+          
+  case llvm::Triple::wdc65816:
+    return *(TheTargetCodeGenInfo = new WDC65816TargetCodeGenInfo(Types));
 
   case llvm::Triple::systemz:
     return *(TheTargetCodeGenInfo = new SystemZTargetCodeGenInfo(Types));
