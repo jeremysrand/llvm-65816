@@ -46,12 +46,12 @@ namespace llvm {
         
         
         unsigned getGlobalBaseReg() const {
-            WDC_LOG("Returning %u", GlobalBaseReg);
+            WDC_LOG("Returning " << GlobalBaseReg);
             return GlobalBaseReg;
         }
         
         void setGlobalBaseReg(unsigned Reg) {
-            WDC_LOG("Setting global base register to %u", Reg);
+            WDC_LOG("Setting global base register to " << Reg);
             GlobalBaseReg = Reg;
         }
         

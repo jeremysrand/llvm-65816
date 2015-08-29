@@ -76,12 +76,13 @@ bool WDC65816PassConfig::addPreEmitPass(){
 }
 
 
-void llvm::logWDCMessage(const char *file, const char *function, unsigned int linenum, const char *format, ...)
+raw_ostream &llvm::wdc_dbgs(const char *file, const char *function, unsigned int linenum)
 {
     char timebuf[64];
-    va_list args;
+    char fractime[16];
     struct timeval now;
     const char *filename = strrchr(file, '/');
+    raw_ostream &wdc_dbgs();
     
     if (filename != NULL)
         filename++;
@@ -90,10 +91,7 @@ void llvm::logWDCMessage(const char *file, const char *function, unsigned int li
     
     gettimeofday(&now, NULL);
     strftime(timebuf, sizeof(timebuf), "%T", localtime(&(now.tv_sec)));
+    snprintf(fractime, sizeof(fractime), ".%06u", now.tv_usec);
     
-    va_start(args, format);
-    fprintf(stderr, "| WDCLog | %s.%06u | %s:%u | %s | ", timebuf, now.tv_usec, filename, linenum, function);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, " |\n");
-    va_end (args);
+    return dbgs() << "| WDCLog | " << timebuf << fractime << " | " << filename << ":" << linenum << " | " << function << " | ";
 }

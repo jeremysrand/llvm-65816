@@ -75,11 +75,11 @@ SDValue WDC65816TargetLowering::LowerFormalArguments(SDValue Chain,
         unsigned Offset = VA.getLocMemOffset();
         
         if (VA.needsCustom()) {
-            WDC_LOG("WDC_TODO - needsCustom() in memory location, offset=%u!", Offset);
+            WDC_LOG("WDC_TODO - needsCustom() in memory location, offset=" << Offset);
             continue;
         }
         
-        WDC_LOG("WDC_TODO - Write code for memory location, offset=%u", Offset);
+        WDC_LOG("WDC_TODO - Write code for memory location, offset=" << Offset);
     }
     
     if (MF.getFunction()->hasStructRetAttr()) {

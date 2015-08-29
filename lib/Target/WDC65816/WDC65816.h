@@ -17,17 +17,11 @@
 
 #include "MCTargetDesc/WDC65816MCTargetDesc.h"
 #include "llvm/Support/ErrorHandling.h"
+#include "llvm/Support/Debug.h"
 #include "llvm/Target/TargetMachine.h"
 
 
-#define WDC_DEBUG   // This is a debug build option which enables logging and perhaps more in the future.
-
-#ifdef WDC_DEBUG
-#define WDC_LOG(...) llvm::logWDCMessage(__FILE__, __func__, __LINE__, __VA_ARGS__)
-#else
-#define WDC_LOG(...)
-#endif
-
+#define WDC_LOG(X) DEBUG_WITH_TYPE("WDC", wdc_dbgs(__FILE__, __func__, __LINE__) << X << "\n");
 
 namespace llvm {
     class FunctionPass;
@@ -36,7 +30,7 @@ namespace llvm {
     
     FunctionPass *createWDC65816ISelDag(WDC65816TargetMachine &TM);
     
-    void logWDCMessage(const char *file, const char *function, unsigned int linenum, const char *format, ...);
+    raw_ostream &wdc_dbgs(const char *file, const char *function, unsigned int linenum);
     
 } // end namespace llvm;
 
