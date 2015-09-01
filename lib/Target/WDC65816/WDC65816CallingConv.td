@@ -17,8 +17,7 @@
 
 // WDC C return-value convention.
 def RetCC_WDC : CallingConv<[
-  CCIfType<[i16], CCAssignToReg<[A]>>,
-  CCIfType<[i32], CCAssignToReg<[X, A]>>
+  CCIfType<[i16], CCAssignToReg<[A, X]>>
 ]>;
 
 // WDC C Calling convention.
