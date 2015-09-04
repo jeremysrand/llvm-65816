@@ -37,7 +37,7 @@ namespace llvm {
         
         bool is64Bit() const { return false; }
         std::string getDataLayout() const {
-            return std::string("e-p:32:8:8-i16:8:8-f32:8:8-f68:8:8-n16");
+            return std::string("e-p:32:8:8-i8:8:8-i16:8:8-i32:8:8-f32:8:8-f64:8:8-n16:8");
         }
         
 #if 0 // WDC_TODO - do I need any of this?
