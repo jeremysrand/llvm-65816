@@ -810,12 +810,16 @@ static SPCC::CondCodes FPCondCCodeToFCC(ISD::CondCode CC) {
 WDC65816TargetLowering::WDC65816TargetLowering(TargetMachine &TM)
 : TargetLowering(TM, new TargetLoweringObjectFileELF()) {
     
-    addRegisterClass(MVT::i16, &WDC::Int16RegsRegClass);
+    addRegisterClass(MVT::i16, &WDC::AccRegsRegClass);
+    addRegisterClass(MVT::i16, &WDC::IndexXRegsRegClass);
+    addRegisterClass(MVT::i16, &WDC::IndexYRegsRegClass);
 #if 0 // WDC_TODO - turn these off for now...
       // The problem here is that if LLVM thinks we have 32bit and 64bit registers
       // then it insists on promoting ints to 32-bit even though we have said we are
       // natively a 16-bit machine.  Also, I haven't bothered to tell LLVM yet how to
       // load values into these registers which I think confuses it.  So, off for now.
+    
+    addRegisterClass(MVT::i16, &WDC::Int16RegsRegClass);
     addRegisterClass(MVT::i32, &WDC::Int32RegsRegClass);
     addRegisterClass(MVT::i64, &WDC::Int64RegsRegClass);
     addRegisterClass(MVT::f32, &WDC::Float32RegsRegClass);

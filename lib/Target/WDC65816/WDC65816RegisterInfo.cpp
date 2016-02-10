@@ -30,12 +30,6 @@
 
 using namespace llvm;
 
-#if 0 // TODO - What is this?
-static cl::opt<bool>
-ReserveAppRegisters("sparc-reserve-app-registers", cl::Hidden, cl::init(false),
-                    cl::desc("Reserve application registers (%g2-%g4)"));
-#endif
-
 WDC65816RegisterInfo::WDC65816RegisterInfo(WDC65816Subtarget &st)
 : WDC65816GenRegisterInfo(WDC::P), Subtarget(st) {
 }

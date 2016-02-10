@@ -64,3 +64,49 @@ unsigned WDC65816InstrInfo::getGlobalBaseReg(MachineFunction *MF) const
     return GlobalBaseReg;
 #endif
 }
+
+void WDC65816InstrInfo::storeRegToStackSlot(MachineBasicBlock &MBB,
+                                          MachineBasicBlock::iterator MI,
+                                          unsigned SrcReg, bool isKill, int FrameIdx,
+                                          const TargetRegisterClass *RC,
+                                          const TargetRegisterInfo *TRI) const {
+    DebugLoc DL;
+    if (MI != MBB.end()) DL = MI->getDebugLoc();
+    MachineFunction &MF = *MBB.getParent();
+    MachineFrameInfo &MFI = *MF.getFrameInfo();
+    
+    MachineMemOperand *MMO =
+    MF.getMachineMemOperand(MachinePointerInfo::getFixedStack(FrameIdx),
+                            MachineMemOperand::MOStore,
+                            MFI.getObjectSize(FrameIdx),
+                            MFI.getObjectAlignment(FrameIdx));
+    
+    if (RC == &WDC::AccRegsRegClass)
+        BuildMI(MBB, MI, DL, get(WDC::STAabsl))
+        .addFrameIndex(FrameIdx).addReg(SrcReg, getKillRegState(isKill)).addMemOperand(MMO);
+    else
+        llvm_unreachable("Cannot store this register to stack slot!");
+}
+
+void WDC65816InstrInfo::loadRegFromStackSlot(MachineBasicBlock &MBB,
+                                           MachineBasicBlock::iterator MI,
+                                           unsigned DestReg, int FrameIdx,
+                                           const TargetRegisterClass *RC,
+                                           const TargetRegisterInfo *TRI) const{
+    DebugLoc DL;
+    if (MI != MBB.end()) DL = MI->getDebugLoc();
+    MachineFunction &MF = *MBB.getParent();
+    MachineFrameInfo &MFI = *MF.getFrameInfo();
+    
+    MachineMemOperand *MMO =
+    MF.getMachineMemOperand(MachinePointerInfo::getFixedStack(FrameIdx),
+                            MachineMemOperand::MOLoad,
+                            MFI.getObjectSize(FrameIdx),
+                            MFI.getObjectAlignment(FrameIdx));
+    
+    if (RC == &WDC::AccRegsRegClass)
+        BuildMI(MBB, MI, DL, get(WDC::LDAabsl))
+        .addReg(DestReg).addFrameIndex(FrameIdx).addMemOperand(MMO);
+    else
+        llvm_unreachable("Cannot store this register to stack slot!");
+}

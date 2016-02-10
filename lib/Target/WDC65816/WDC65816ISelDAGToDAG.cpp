@@ -167,13 +167,13 @@ bool SparcDAGToDAGISel::SelectADDRrr(SDValue Addr, SDValue &R1, SDValue &R2) {
 #endif
 
 SDNode *WDC65816DAGToDAGISel::Select(SDNode *N) {
-    WDC_LOG("WDC_TODO - Unimplemented method called, opcode=" << N);
     SDLoc dl(N);
     if (N->isMachineOpcode()) {
         N->setNodeId(-1);
         return NULL;   // Already selected.
     }
     
+    WDC_LOG("WDC_TODO - Unimplemented method called, opcode=" << N->getOpcode());
     switch (N->getOpcode()) {
         default: break;
             

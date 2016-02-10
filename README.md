@@ -53,7 +53,7 @@ Here are the steps to checkout the code and build it:
     $ git clone https://github.com/jeremysrand/llvm-65816.git
     $ mkdir build
     $ cd build
-    $ cmake -G "Unix Makefiles" ../llvm-65816
+    $ cmake -DCMAKE_BUILD_TYPE:STRING=Debug -G "Unix Makefiles" ../llvm-65816
     $ make
 
 That works for me on my Mac.  Note, you probably need to download cmake.
