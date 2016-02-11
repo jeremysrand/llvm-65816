@@ -70,6 +70,8 @@ namespace llvm {
                     const SmallVectorImpl<SDValue> &OutVals,
                     SDLoc dl, SelectionDAG &DAG) const;
         
+        virtual const char *getTargetNodeName(unsigned Opcode) const;
+        
 #if 0 // WDC_TODO - Do I need any of this?
         virtual SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const;
         
@@ -86,7 +88,6 @@ namespace llvm {
         EmitInstrWithCustomInserter(MachineInstr *MI,
                                     MachineBasicBlock *MBB) const;
         
-        virtual const char *getTargetNodeName(unsigned Opcode) const;
         
         ConstraintType getConstraintType(const std::string &Constraint) const;
         std::pair<unsigned, const TargetRegisterClass*>

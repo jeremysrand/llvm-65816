@@ -174,6 +174,8 @@ SDNode *WDC65816DAGToDAGISel::Select(SDNode *N) {
     }
     
     WDC_LOG("WDC_TODO - Unimplemented method called, opcode=" << N->getOpcode());
+    // Uncomment the following line to see the node info.
+    // N->dumprFull(CurDAG);
     switch (N->getOpcode()) {
         default: break;
             

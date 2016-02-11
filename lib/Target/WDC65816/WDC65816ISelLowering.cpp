@@ -1102,33 +1102,15 @@ WDC65816TargetLowering::WDC65816TargetLowering(TargetMachine &TM)
 #endif
 }
 
-#if 0 // WDC_TODO - Disable this stuff for now...
 const char *WDC65816TargetLowering::getTargetNodeName(unsigned Opcode) const {
     switch (Opcode) {
         default: return 0;
-        case SPISD::CMPICC:     return "SPISD::CMPICC";
-        case SPISD::CMPFCC:     return "SPISD::CMPFCC";
-        case SPISD::BRICC:      return "SPISD::BRICC";
-        case SPISD::BRXCC:      return "SPISD::BRXCC";
-        case SPISD::BRFCC:      return "SPISD::BRFCC";
-        case SPISD::SELECT_ICC: return "SPISD::SELECT_ICC";
-        case SPISD::SELECT_XCC: return "SPISD::SELECT_XCC";
-        case SPISD::SELECT_FCC: return "SPISD::SELECT_FCC";
-        case SPISD::Hi:         return "SPISD::Hi";
-        case SPISD::Lo:         return "SPISD::Lo";
-        case SPISD::FTOI:       return "SPISD::FTOI";
-        case SPISD::ITOF:       return "SPISD::ITOF";
-        case SPISD::FTOX:       return "SPISD::FTOX";
-        case SPISD::XTOF:       return "SPISD::XTOF";
-        case SPISD::CALL:       return "SPISD::CALL";
-        case SPISD::RET_FLAG:   return "SPISD::RET_FLAG";
-        case SPISD::GLOBAL_BASE_REG: return "SPISD::GLOBAL_BASE_REG";
-        case SPISD::FLUSHW:     return "SPISD::FLUSHW";
-        case SPISD::TLS_ADD:    return "SPISD::TLS_ADD";
-        case SPISD::TLS_LD:     return "SPISD::TLS_LD";
-        case SPISD::TLS_CALL:   return "SPISD::TLS_CALL";
+        case WDCISD::RET_FLAG:   return "WDCSD::RET_FLAG";
     }
 }
+
+
+#if 0 // WDC_TODO - Disable this stuff for now...
 
 EVT WDC65816TargetLowering::getSetCCResultType(LLVMContext &, EVT VT) const {
     if (!VT.isVector())
