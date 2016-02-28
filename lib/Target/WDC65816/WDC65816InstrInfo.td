@@ -104,29 +104,29 @@ def WDCRET             : SDNode<"WDCISD::RET_FLAG", SDTNone, [SDNPHasChain, SDNP
 
 // Group #1 Instructions
 
-// JSR TODO - Need to set all of the DAG patterns
-// JSR TODO - Addresses are 32-bit to llvm but can we toss the upper byte for long addressing modes which are 24-bit
-// JSR TODO - Need to specify flag behaviour, especially carry for ADC, SBC, CMP
+// WDC_TODO - Need to set all of the DAG patterns
+// WDC_TODO - Addresses are 32-bit to llvm but can we toss the upper byte for long addressing modes which are 24-bit
+// WDC_TODO - Need to specify flag behaviour, especially carry for ADC, SBC, CMP
 
 def ADCimm : Group1<OpGrp1ADC, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "ADC #>$src2",
-                  [(set i16:$dst, (add i16:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (add AccRegs:$src1, i16:$src2))]>;
 
 def ADCabs :  Group1<OpGrp1ADC, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
                   "ADC |$src2",
-                  [(set i16:$dst, (add i16:$src1, (load ADDRabs:$src2)))]>;
+                  [(set AccRegs:$dst, (add AccRegs:$src1, (load ADDRabs:$src2)))]>;
 
 def ADCabsl :  Group1<OpGrp1ADC, AddrModeGrp1AbsLong,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabsl:$src2),
                   "ADC >$src2",
-                  [(set i16:$dst, (add i16:$src1, (load ADDRabsl:$src2)))]>;
+                  [(set AccRegs:$dst, (add AccRegs:$src1, (load ADDRabsl:$src2)))]>;
 
 def ADCdp :  Group1<OpGrp1ADC, AddrModeGrp1DP,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
                   "ADC <$src2",
-                  [(set i16:$dst, (add i16:$src1, (load ADDRdp:$src2)))]>;
+                  [(set AccRegs:$dst, (add AccRegs:$src1, (load ADDRdp:$src2)))]>;
 
 def ADCdpindir :  Group1<OpGrp1ADC, AddrModeGrp1DPIndir,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
@@ -186,22 +186,22 @@ def ADCsrindir :  Group1<OpGrp1ADC, AddrModeGrp1StackRelIndirIdxY,
 def ANDimm : Group1<OpGrp1AND, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "AND #>$src2",
-                  [(set i16:$dst, (and i16:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (and AccRegs:$src1, i16:$src2))]>;
 
 def ANDabs :  Group1<OpGrp1AND, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
                   "AND |$src2",
-                  [(set i16:$dst, (and i16:$src1, (load ADDRabs:$src2)))]>;
+                  [(set AccRegs:$dst, (and AccRegs:$src1, (load ADDRabs:$src2)))]>;
 
 def ANDabsl :  Group1<OpGrp1AND, AddrModeGrp1AbsLong,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabsl:$src2),
                   "AND >$src2",
-                  [(set i16:$dst, (and i16:$src1, (load ADDRabsl:$src2)))]>;
+                  [(set AccRegs:$dst, (and AccRegs:$src1, (load ADDRabsl:$src2)))]>;
 
 def ANDdp :  Group1<OpGrp1AND, AddrModeGrp1DP,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
                   "AND <$src2",
-                  [(set i16:$dst, (and i16:$src1, (load ADDRdp:$src2)))]>;
+                  [(set AccRegs:$dst, (and AccRegs:$src1, (load ADDRdp:$src2)))]>;
 
 def ANDdpindir :  Group1<OpGrp1AND, AddrModeGrp1DPIndir,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
@@ -336,22 +336,22 @@ def CMPsrindir :  Group1<OpGrp1CMP, AddrModeGrp1StackRelIndirIdxY,
 def EORimm : Group1<OpGrp1EOR, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "EOR #>$src2",
-                  [(set i16:$dst, (xor i16:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (xor AccRegs:$src1, i16:$src2))]>;
 
 def EORabs :  Group1<OpGrp1EOR, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
                   "EOR |$src2",
-                  [(set i16:$dst, (xor i16:$src1, (load ADDRabs:$src2)))]>;
+                  [(set AccRegs:$dst, (xor AccRegs:$src1, (load ADDRabs:$src2)))]>;
 
 def EORabsl :  Group1<OpGrp1EOR, AddrModeGrp1AbsLong,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabsl:$src2),
                   "EOR >$src2",
-                  [(set i16:$dst, (xor i16:$src1, (load ADDRabsl:$src2)))]>;
+                  [(set AccRegs:$dst, (xor AccRegs:$src1, (load ADDRabsl:$src2)))]>;
 
 def EORdp :  Group1<OpGrp1EOR, AddrModeGrp1DP,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
                   "EOR <$src2",
-                  [(set i16:$dst, (xor i16:$src1, (load ADDRdp:$src2)))]>;
+                  [(set AccRegs:$dst, (xor AccRegs:$src1, (load ADDRdp:$src2)))]>;
 
 def EORdpindir :  Group1<OpGrp1EOR, AddrModeGrp1DPIndir,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
@@ -411,22 +411,22 @@ def EORsrindir :  Group1<OpGrp1EOR, AddrModeGrp1StackRelIndirIdxY,
 def LDAimm : Group1<OpGrp1LDA, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins i16imm:$src),
                   "LDA #>$src",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set AccRegs:$dst, i16:$src)]>;
 
 def LDAabs :  Group1<OpGrp1LDA, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins MEMabs:$src),
                   "LDA |$src",
-                  [(set i16:$dst, (load ADDRabs:$src))]>;
+                  [(set AccRegs:$dst, (load ADDRabs:$src))]>;
 
 def LDAabsl :  Group1<OpGrp1LDA, AddrModeGrp1AbsLong,
                   (outs AccRegs:$dst), (ins MEMabsl:$src),
                   "LDA >$src",
-                  [(set i16:$dst, (load ADDRabsl:$src))]>;
+                  [(set AccRegs:$dst, (load ADDRabsl:$src))]>;
 
 def LDAdp :  Group1<OpGrp1LDA, AddrModeGrp1DP,
                   (outs AccRegs:$dst), (ins MEMdp:$src),
                   "LDA <$src",
-                  [(set i16:$dst, (load ADDRdp:$src))]>;
+                  [(set AccRegs:$dst, (load ADDRdp:$src))]>;
 
 def LDAdpindir :  Group1<OpGrp1LDA, AddrModeGrp1DPIndir,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
@@ -486,22 +486,22 @@ def LDAsrindir :  Group1<OpGrp1LDA, AddrModeGrp1StackRelIndirIdxY,
 def ORAimm : Group1<OpGrp1ORA, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "ORA #>$src2",
-                  [(set i16:$dst, (or i16:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (or AccRegs:$src1, i16:$src2))]>;
 
 def ORAabs :  Group1<OpGrp1ORA, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
                   "ORA |$src2",
-                  [(set i16:$dst, (or i16:$src1, (load ADDRabs:$src2)))]>;
+                  [(set AccRegs:$dst, (or AccRegs:$src1, (load ADDRabs:$src2)))]>;
 
 def ORAabsl :  Group1<OpGrp1ORA, AddrModeGrp1AbsLong,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabsl:$src2),
                   "ORA >$src2",
-                  [(set i16:$dst, (or i16:$src1, (load ADDRabsl:$src2)))]>;
+                  [(set AccRegs:$dst, (or AccRegs:$src1, (load ADDRabsl:$src2)))]>;
 
 def ORAdp :  Group1<OpGrp1ORA, AddrModeGrp1DP,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
                   "ORA <$src2",
-                  [(set i16:$dst, (or i16:$src1, (load ADDRdp:$src2)))]>;
+                  [(set AccRegs:$dst, (or AccRegs:$src1, (load ADDRdp:$src2)))]>;
 
 def ORAdpindir :  Group1<OpGrp1ORA, AddrModeGrp1DPIndir,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
@@ -561,22 +561,22 @@ def ORAsrindir :  Group1<OpGrp1ORA, AddrModeGrp1StackRelIndirIdxY,
 def SBCimm : Group1<OpGrp1SBC, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "SBC #>$src2",
-                  [(set i16:$dst, (sub i16:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (sub AccRegs:$src1, i16:$src2))]>;
 
 def SBCabs :  Group1<OpGrp1SBC, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
                   "SBC |$src2",
-                  [(set i16:$dst, (sub i16:$src1, (load ADDRabs:$src2)))]>;
+                  [(set AccRegs:$dst, (sub AccRegs:$src1, (load ADDRabs:$src2)))]>;
 
 def SBCabsl :  Group1<OpGrp1SBC, AddrModeGrp1AbsLong,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabsl:$src2),
                   "SBC >$src2",
-                  [(set i16:$dst, (sub i16:$src1, (load ADDRabsl:$src2)))]>;
+                  [(set AccRegs:$dst, (sub AccRegs:$src1, (load ADDRabsl:$src2)))]>;
 
 def SBCdp :  Group1<OpGrp1SBC, AddrModeGrp1DP,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
                   "SBC <$src2",
-                  [(set i16:$dst, (sub i16:$src1, (load ADDRdp:$src2)))]>;
+                  [(set AccRegs:$dst, (sub AccRegs:$src1, (load ADDRdp:$src2)))]>;
 
 def SBCdpindir :  Group1<OpGrp1SBC, AddrModeGrp1DPIndir,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMdp:$src2),
@@ -636,17 +636,17 @@ def SBCsrindir :  Group1<OpGrp1SBC, AddrModeGrp1StackRelIndirIdxY,
 def STAabs :  Group1<OpGrp1STA, AddrModeGrp1Abs,
                   (outs), (ins AccRegs:$src, MEMabs:$dst),
                   "STA |$dst",
-                  [(store i16:$src, ADDRabs:$dst)]>;
+                  [(store AccRegs:$src, ADDRabs:$dst)]>;
 
 def STAabsl :  Group1<OpGrp1STA, AddrModeGrp1AbsLong,
                   (outs), (ins AccRegs:$src, MEMabsl:$dst),
                   "STA >$dst",
-                  [(store i16:$src, ADDRabsl:$dst)]>;
+                  [(store AccRegs:$src, ADDRabsl:$dst)]>;
 
 def STAdp :  Group1<OpGrp1STA, AddrModeGrp1DP,
                   (outs), (ins AccRegs:$src,  MEMdp:$dst),
                   "STA <$dst",
-                  [(store i16:$src, ADDRdp:$dst)]>;
+                  [(store AccRegs:$src, ADDRdp:$dst)]>;
 
 def STAdpindir :  Group1<OpGrp1STA, AddrModeGrp1DPIndir,
                   (outs), (ins AccRegs:$src1, MEMdp:$src2, AccRegs:$dst),
@@ -708,19 +708,19 @@ def STAsrindir :  Group1<OpGrp1STA, AddrModeGrp1StackRelIndirIdxY,
 def ASLacc : Group2<OpGrp2ASL, AddrModeGrp2Acc,
                   (outs AccRegs:$dst), (ins AccRegs:$src),
                   "ASL $src",
-                  [(set i16:$dst, (shl i16:$src, (i16 1)))]>;
+                  [(set AccRegs:$dst, (shl AccRegs:$src, (i16 1)))]>;
                   
 def ASLabs : Group2<OpGrp2ASL, AddrModeGrp2Abs,
                   (outs ), (ins MEMabs:$dst),
                   "ASL |$dst",
                   []>;
-                  // JSR TODO - [(store (shl (load ADDRabs:$dst), (i16 1)), ADDRabs:$dst)]>;
+                  // WDC_TODO - [(store (shl (load ADDRabs:$dst), (i16 1)), ADDRabs:$dst)]>;
                   
 def ASLdp : Group2<OpGrp2ASL, AddrModeGrp2DP,
                   (outs ), (ins MEMdp:$dst),
                   "ASL <$dst",
                   []>;
-                  // JSR TODO - [(store (shl (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
+                  // WDC_TODO - [(store (shl (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
                   
 def ASLabsix : Group2<OpGrp2ASL, AddrModeGrp2AbsIdx,
                   (outs MEMabs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -735,19 +735,19 @@ def ASLdpix : Group2<OpGrp2ASL, AddrModeGrp2DPIdx,
 def DECacc : Group2<OpGrp2DEC, AddrModeGrp2Acc,
                   (outs AccRegs:$dst), (ins AccRegs:$src),
                   "DEC $src",
-                  [(set i16:$dst, (sub i16:$src, 1))]>;
+                  [(set AccRegs:$dst, (sub AccRegs:$src, 1))]>;
                   
 def DECabs : Group2<OpGrp2DEC, AddrModeGrp2Abs,
                   (outs ), (ins MEMabs:$dst),
                   "DEC |$dst",
                   []>;
-                  // JSR TODO - [(store (sub (load ADDRabs:$dst), 1), ADDRabs:$dst)]>;
+                  // WDC_TODO - [(store (sub (load ADDRabs:$dst), 1), ADDRabs:$dst)]>;
                   
 def DECdp : Group2<OpGrp2DEC, AddrModeGrp2DP,
                   (outs ), (ins MEMdp:$dst),
                   "DEC <$dst",
                   []>;
-                  // JSR TODO - [(store (sub (load ADDRdp:$dst), 1), ADDRdp:$dst)]>;
+                  // WDC_TODO - [(store (sub (load ADDRdp:$dst), 1), ADDRdp:$dst)]>;
                   
 def DECabsix : Group2<OpGrp2DEC, AddrModeGrp2AbsIdx,
                   (outs MEMabs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -762,19 +762,19 @@ def DECdpix : Group2<OpGrp2DEC, AddrModeGrp2DPIdx,
 def INCacc : Group2<OpGrp2INC, AddrModeGrp2Acc,
                   (outs AccRegs:$dst), (ins AccRegs:$src),
                   "INC $src",
-                  [(set i16:$dst, (add i16:$src, 1))]>;
+                  [(set AccRegs:$dst, (add AccRegs:$src, 1))]>;
                   
 def INCabs : Group2<OpGrp2INC, AddrModeGrp2Abs,
                   (outs ), (ins MEMabs:$dst),
                   "INC |$dst",
                   []>;
-                  // JSR TODO - [(store (add (load ADDRabs:$dst), 1), ADDRabs:$dst)]>;
+                  // WDC_TODO - [(store (add (load ADDRabs:$dst), 1), ADDRabs:$dst)]>;
                   
 def INCdp : Group2<OpGrp2INC, AddrModeGrp2DP,
                   (outs ), (ins MEMdp:$dst),
                   "INC <$dst",
                   []>;
-                  // JSR TODO - [(store (add (load ADDRdp:$dst), 1), ADDRdp:$dst)]>;
+                  // WDC_TODO - [(store (add (load ADDRdp:$dst), 1), ADDRdp:$dst)]>;
                   
 def INCabsix : Group2<OpGrp2INC, AddrModeGrp2AbsIdx,
                   (outs MEMabs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -789,17 +789,17 @@ def INCdpix : Group2<OpGrp2INC, AddrModeGrp2DPIdx,
 def LDXimm : Group2<OpGrp2LDXY, AddrModeGrp2Imm,
                   (outs IndexXRegs:$dst), (ins i16imm:$src),
                   "LDX #$src",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexXRegs:$dst, i16:$src)]>;
                   
 def LDXabs : Group2<OpGrp2LDXY, AddrModeGrp2Abs,
                   (outs IndexXRegs:$dst), (ins MEMabs:$src),
                   "LDX |$src",
-                  [(set i16:$dst, (load ADDRabs:$src))]>;
+                  [(set IndexXRegs:$dst, (load ADDRabs:$src))]>;
                   
 def LDXdp : Group2<OpGrp2LDXY, AddrModeGrp2DP,
                   (outs IndexXRegs:$dst), (ins MEMdp:$src),
                   "LDX <$src",
-                  [(set i16:$dst, (load ADDRdp:$src))]>;
+                  [(set IndexXRegs:$dst, (load ADDRdp:$src))]>;
                   
 def LDXabsiy : Group2<OpGrp2LDXY, AddrModeGrp2AbsIdx,
                   (outs IndexXRegs:$dst), (ins MEMabs:$src1, IndexYRegs:$src2),
@@ -814,17 +814,17 @@ def LDXdpiy : Group2<OpGrp2LDXY, AddrModeGrp2DPIdx,
 def LDYimm : Group2_Y<OpGrp2LDXY, AddrModeGrp2Imm,
                   (outs IndexYRegs:$dst), (ins i16imm:$src),
                   "LDY #$src",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexYRegs:$dst, i16:$src)]>;
                   
 def LDYabs : Group2_Y<OpGrp2LDXY, AddrModeGrp2Abs,
                   (outs IndexYRegs:$dst), (ins MEMabs:$src),
                   "LDY |$src",
-                  [(set i16:$dst, (load ADDRabs:$src))]>;
+                  [(set IndexYRegs:$dst, (load ADDRabs:$src))]>;
                   
 def LDYdp : Group2_Y<OpGrp2LDXY, AddrModeGrp2DP,
                   (outs IndexYRegs:$dst), (ins MEMdp:$src),
                   "LDY <$src",
-                  [(set i16:$dst, (load ADDRdp:$src))]>;
+                  [(set IndexYRegs:$dst, (load ADDRdp:$src))]>;
                   
 def LDYabsix : Group2_Y<OpGrp2LDXY, AddrModeGrp2AbsIdx,
                   (outs IndexYRegs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -839,19 +839,19 @@ def LDYdpix : Group2_Y<OpGrp2LDXY, AddrModeGrp2DPIdx,
 def LSRacc : Group2<OpGrp2LSR, AddrModeGrp2Acc,
                   (outs AccRegs:$dst), (ins AccRegs:$src),
                   "LSR $src",
-                  [(set i16:$dst, (srl i16:$src, (i8 1)))]>;
+                  [(set AccRegs:$dst, (srl AccRegs:$src, (i8 1)))]>;
                   
 def LSRabs : Group2<OpGrp2LSR, AddrModeGrp2Abs,
                   (outs ), (ins MEMabs:$dst),
                   "LSR |$dst",
                   []>;
-                  // JSR TODO - [(store (srl (load ADDRabs:$dst), (i8 1)), ADDRabs:$dst)]>;
+                  // WDC_TODO - [(store (srl (load ADDRabs:$dst), (i8 1)), ADDRabs:$dst)]>;
                   
 def LSRdp : Group2<OpGrp2LSR, AddrModeGrp2DP,
                   (outs ), (ins MEMdp:$dst),
                   "LSR <$dst",
                   []>;
-                  // JSR TODO - [(store (srl (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
+                  // WDC_TODO - [(store (srl (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
                   
 def LSRabsix : Group2<OpGrp2LSR, AddrModeGrp2AbsIdx,
                   (outs MEMabs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -866,19 +866,19 @@ def LSRdpix : Group2<OpGrp2LSR, AddrModeGrp2DPIdx,
 def ROLacc : Group2<OpGrp2ROL, AddrModeGrp2Acc,
                   (outs AccRegs:$dst), (ins AccRegs:$src),
                   "ROL $src",
-                  [(set i16:$dst, (rotl i16:$src, (i8 1)))]>;
+                  [(set AccRegs:$dst, (rotl AccRegs:$src, (i8 1)))]>;
                   
 def ROLabs : Group2<OpGrp2ROL, AddrModeGrp2Abs,
                   (outs ), (ins MEMabs:$dst),
                   "ROL |$dst",
                   []>;
-                  // JSR TODO - [(store (rotl (load ADDRabs:$dst), (i8 1)), ADDRabs:$dst)]>;
+                  // WDC_TODO - [(store (rotl (load ADDRabs:$dst), (i8 1)), ADDRabs:$dst)]>;
                   
 def ROLdp : Group2<OpGrp2ROL, AddrModeGrp2DP,
                   (outs ), (ins MEMdp:$dst),
                   "ROL <$dst",
                   []>;
-                  // JSR TODO - [(store (rotl (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
+                  // WDC_TODO - [(store (rotl (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
                   
 def ROLabsix : Group2<OpGrp2ROL, AddrModeGrp2AbsIdx,
                   (outs MEMabs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -893,19 +893,19 @@ def ROLdpix : Group2<OpGrp2ROL, AddrModeGrp2DPIdx,
 def RORacc : Group2<OpGrp2ROR, AddrModeGrp2Acc,
                   (outs AccRegs:$dst), (ins AccRegs:$src),
                   "ROR $src",
-                  [(set i16:$dst, (rotr i16:$src, (i8 1)))]>;
+                  [(set AccRegs:$dst, (rotr AccRegs:$src, (i8 1)))]>;
                   
 def RORabs : Group2<OpGrp2ROR, AddrModeGrp2Abs,
                   (outs ), (ins MEMabs:$dst),
                   "ROR |$dst",
                   []>;
-                  // JSR TODO - [(store (rotr (load ADDRabs:$dst), (i8 1)), ADDRabs:$dst)]>;
+                  // WDC_TODO - [(store (rotr (load ADDRabs:$dst), (i8 1)), ADDRabs:$dst)]>;
                   
 def RORdp : Group2<OpGrp2ROR, AddrModeGrp2DP,
                   (outs ), (ins MEMdp:$dst),
                   "ROR <$dst",
                   []>;
-                  // JSR TODO - [(store (rotr (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
+                  // WDC_TODO - [(store (rotr (load ADDRdp:$dst), (i8 1)), ADDRdp:$dst)]>;
                   
 def RORabsix : Group2<OpGrp2ROR, AddrModeGrp2AbsIdx,
                   (outs MEMabs:$dst), (ins MEMabs:$src1, IndexXRegs:$src2),
@@ -920,12 +920,12 @@ def RORdpix : Group2<OpGrp2ROR, AddrModeGrp2DPIdx,
 def STXabs : Group2<OpGrp2STXY, AddrModeGrp2Abs,
                   (outs), (ins IndexXRegs:$src, MEMabs:$dst),
                   "STX |$dst",
-                  [(store i16:$src, ADDRabs:$dst)]>;
+                  [(store IndexXRegs:$src, ADDRabs:$dst)]>;
                   
 def STXdp : Group2<OpGrp2STXY, AddrModeGrp2DP,
                   (outs), (ins IndexXRegs:$src, MEMdp:$dst),
                   "STX <$dst",
-                  [(store i16:$src, ADDRdp:$dst)]>;
+                  [(store IndexXRegs:$src, ADDRdp:$dst)]>;
                   
 def STXdpiy : Group2<OpGrp2STXY, AddrModeGrp2DPIdx,
                   (outs), (ins IndexXRegs:$src1, IndexYRegs:$src2, MEMabs:$dst),
@@ -935,12 +935,12 @@ def STXdpiy : Group2<OpGrp2STXY, AddrModeGrp2DPIdx,
 def STYabs : Group2_Y<OpGrp2STXY, AddrModeGrp2Abs,
                   (outs), (ins IndexYRegs:$src, MEMabs:$dst),
                   "STY |$dst",
-                  [(store i16:$src, ADDRabs:$dst)]>;
+                  [(store IndexYRegs:$src, ADDRabs:$dst)]>;
                   
 def STYdp : Group2_Y<OpGrp2STXY, AddrModeGrp2DP,
                   (outs), (ins IndexYRegs:$src, MEMdp:$dst),
                   "STY <$dst",
-                  [(store i16:$src, ADDRdp:$dst)]>;
+                  [(store IndexYRegs:$src, ADDRdp:$dst)]>;
                   
 def STYdpix : Group2_Y<OpGrp2STXY, AddrModeGrp2DPIdx,
                   (outs), (ins IndexYRegs:$src1, IndexXRegs:$src2, MEMabs:$dst),
@@ -1089,22 +1089,22 @@ def CPYdp :  Group3<OpGrp3CPYdp,
 def DEX :  Group3<OpGrp3DEX,
                   (outs IndexXRegs:$dst), (ins IndexXRegs:$src),
                   "DEX",
-                  [(set i16:$dst, (sub i16:$src, 1))]>;
+                  [(set IndexXRegs:$dst, (sub IndexXRegs:$src, 1))]>;
 
 def DEY :  Group3<OpGrp3DEY,
                   (outs IndexYRegs:$dst), (ins IndexYRegs:$src),
                   "DEY",
-                  [(set i16:$dst, (sub i16:$src, 1))]>;
+                  [(set IndexYRegs:$dst, (sub IndexYRegs:$src, 1))]>;
 
 def INX :  Group3<OpGrp3INX,
                   (outs IndexXRegs:$dst), (ins IndexXRegs:$src),
                   "INX",
-                  [(set i16:$dst, (add i16:$src, 1))]>;
+                  [(set IndexXRegs:$dst, (add IndexXRegs:$src, 1))]>;
 
 def INY :  Group3<OpGrp3INY,
                   (outs IndexYRegs:$dst), (ins IndexYRegs:$src),
                   "INY",
-                  [(set i16:$dst, (add i16:$src, 1))]>;
+                  [(set IndexYRegs:$dst, (add IndexYRegs:$src, 1))]>;
 
 def JMPabs : Group3<OpGrp3JMPabs,
                   (outs ), (ins MEMabs:$src),
@@ -1312,27 +1312,27 @@ def STZdpi :  Group3<OpGrp3STZdpi,
 def TAX :  Group3<OpGrp3TAX,
                   (outs IndexXRegs:$dst), (ins AccRegs:$src),
                   "TAX",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexXRegs:$dst, AccRegs:$src)]>;
 
 def TAY :  Group3<OpGrp3TAY,
                   (outs IndexYRegs:$dst), (ins AccRegs:$src),
                   "TAY",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexYRegs:$dst, AccRegs:$src)]>;
 
 def TCD :  Group3<OpGrp3TCD,
                   (outs DirectPageRegs:$dst), (ins AccRegs:$src),
                   "TCB",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set DirectPageRegs:$dst, AccRegs:$src)]>;
 
 def TCS :  Group3<OpGrp3TCS,
                   (outs StackPointerRegs:$dst), (ins AccRegs:$src),
                   "TCS",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set StackPointerRegs:$dst, AccRegs:$src)]>;
 
 def TDC :  Group3<OpGrp3TDC,
                   (outs AccRegs:$dst), (ins DirectPageRegs:$src),
                   "TDC",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set AccRegs:$dst, DirectPageRegs:$src)]>;
 
 def TRBabs :  Group3<OpGrp3TRBabs,
                   (outs ), (ins MEMabs:$src1, AccRegs:$src2),
@@ -1357,37 +1357,37 @@ def TSBdp :  Group3<OpGrp3TSBdp,
 def TSC :  Group3<OpGrp3TSC,
                   (outs AccRegs:$dst), (ins StackPointerRegs:$src),
                   "TSC",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set AccRegs:$dst, StackPointerRegs:$src)]>;
 
 def TSX :  Group3<OpGrp3TSX,
                   (outs IndexXRegs:$dst), (ins StackPointerRegs:$src),
                   "TSX",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexXRegs:$dst, StackPointerRegs:$src)]>;
 
 def TXA :  Group3<OpGrp3TXA,
                   (outs AccRegs:$dst), (ins IndexXRegs:$src),
                   "TXA",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set AccRegs:$dst, IndexXRegs:$src)]>;
 
 def TXS :  Group3<OpGrp3TXS,
                   (outs StackPointerRegs:$dst), (ins IndexXRegs:$src),
                   "TXS",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set StackPointerRegs:$dst, IndexXRegs:$src)]>;
 
 def TXY :  Group3<OpGrp3TXY,
                   (outs IndexYRegs:$dst), (ins IndexXRegs:$src),
                   "TXY",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexYRegs:$dst, IndexXRegs:$src)]>;
 
 def TYA :  Group3<OpGrp3TYA,
                   (outs AccRegs:$dst), (ins IndexYRegs:$src),
                   "TYA",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set AccRegs:$dst, IndexYRegs:$src)]>;
 
 def TYX :  Group3<OpGrp3TYX,
                   (outs IndexXRegs:$dst), (ins IndexYRegs:$src),
                   "TYX",
-                  [(set i16:$dst, i16:$src)]>;
+                  [(set IndexXRegs:$dst, IndexYRegs:$src)]>;
 
 def WAI :  Group3<OpGrp3WAI,
                   (outs ), (ins ),
