@@ -47,16 +47,17 @@ namespace {
         bool printGetPCX(const MachineInstr *MI, unsigned OpNo, raw_ostream &OS);
         
         static const char *getRegisterName(unsigned RegNo);
-#if 0 // WDC_TODO - How much of this do we need?
-        void printCCOperand(const MachineInstr *MI, int opNum, raw_ostream &OS);
         
-        virtual void EmitFunctionBodyStart();
         virtual void EmitInstruction(const MachineInstr *MI) {
             SmallString<128> Str;
             raw_svector_ostream OS(Str);
             printInstruction(MI, OS);
             OutStreamer.EmitRawText(OS.str());
         }
+#if 0 // WDC_TODO - How much of this do we need?
+        void printCCOperand(const MachineInstr *MI, int opNum, raw_ostream &OS);
+        
+        virtual void EmitFunctionBodyStart();
         
         bool PrintAsmOperand(const MachineInstr *MI, unsigned OpNo,
                              unsigned AsmVariant, const char *ExtraCode,
@@ -86,7 +87,27 @@ namespace {
 
 void WDC65816AsmPrinter::printOperand(const MachineInstr *MI, int opNum,
                                       raw_ostream &O) {
-    WDC_LOG("WDC_TODO - Unimplemented method called");
+    const MachineOperand &MO = MI->getOperand(opNum);
+    switch (MO.getType()) {
+        default: llvm_unreachable("Not implemented yet!");
+        case MachineOperand::MO_Register:
+            O << StringRef(getRegisterName(MO.getReg()));
+            return;
+        case MachineOperand::MO_Immediate:
+            O << MO.getImm();
+            return;
+        case MachineOperand::MO_MachineBasicBlock:
+            O << *MO.getMBB()->getSymbol();
+            return;
+        case MachineOperand::MO_GlobalAddress: {
+            O << *getSymbol(MO.getGlobal());
+            return;
+        }
+        case MachineOperand::MO_ExternalSymbol: {
+            O << MAI->getGlobalPrefix() << MO.getSymbolName();
+            return;
+        }
+    }
 }
 
 

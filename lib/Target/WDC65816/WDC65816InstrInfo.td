@@ -111,7 +111,7 @@ def WDCRET             : SDNode<"WDCISD::RET_FLAG", SDTNone, [SDNPHasChain, SDNP
 def ADCimm : Group1<OpGrp1ADC, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "ADC #>$src2",
-                  [(set AccRegs:$dst, (add AccRegs:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (add AccRegs:$src1, imm:$src2))]>;
 
 def ADCabs :  Group1<OpGrp1ADC, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
@@ -186,7 +186,7 @@ def ADCsrindir :  Group1<OpGrp1ADC, AddrModeGrp1StackRelIndirIdxY,
 def ANDimm : Group1<OpGrp1AND, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "AND #>$src2",
-                  [(set AccRegs:$dst, (and AccRegs:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (and AccRegs:$src1, imm:$src2))]>;
 
 def ANDabs :  Group1<OpGrp1AND, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
@@ -336,7 +336,7 @@ def CMPsrindir :  Group1<OpGrp1CMP, AddrModeGrp1StackRelIndirIdxY,
 def EORimm : Group1<OpGrp1EOR, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "EOR #>$src2",
-                  [(set AccRegs:$dst, (xor AccRegs:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (xor AccRegs:$src1, imm:$src2))]>;
 
 def EORabs :  Group1<OpGrp1EOR, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
@@ -411,7 +411,7 @@ def EORsrindir :  Group1<OpGrp1EOR, AddrModeGrp1StackRelIndirIdxY,
 def LDAimm : Group1<OpGrp1LDA, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins i16imm:$src),
                   "LDA #>$src",
-                  [(set AccRegs:$dst, i16:$src)]>;
+                  [(set AccRegs:$dst, imm:$src)]>;
 
 def LDAabs :  Group1<OpGrp1LDA, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins MEMabs:$src),
@@ -486,7 +486,7 @@ def LDAsrindir :  Group1<OpGrp1LDA, AddrModeGrp1StackRelIndirIdxY,
 def ORAimm : Group1<OpGrp1ORA, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "ORA #>$src2",
-                  [(set AccRegs:$dst, (or AccRegs:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (or AccRegs:$src1, imm:$src2))]>;
 
 def ORAabs :  Group1<OpGrp1ORA, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
@@ -561,7 +561,7 @@ def ORAsrindir :  Group1<OpGrp1ORA, AddrModeGrp1StackRelIndirIdxY,
 def SBCimm : Group1<OpGrp1SBC, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
                   "SBC #>$src2",
-                  [(set AccRegs:$dst, (sub AccRegs:$src1, i16:$src2))]>;
+                  [(set AccRegs:$dst, (sub AccRegs:$src1, imm:$src2))]>;
 
 def SBCabs :  Group1<OpGrp1SBC, AddrModeGrp1Abs,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, MEMabs:$src2),
@@ -789,7 +789,7 @@ def INCdpix : Group2<OpGrp2INC, AddrModeGrp2DPIdx,
 def LDXimm : Group2<OpGrp2LDXY, AddrModeGrp2Imm,
                   (outs IndexXRegs:$dst), (ins i16imm:$src),
                   "LDX #$src",
-                  [(set IndexXRegs:$dst, i16:$src)]>;
+                  [(set IndexXRegs:$dst, imm:$src)]>;
                   
 def LDXabs : Group2<OpGrp2LDXY, AddrModeGrp2Abs,
                   (outs IndexXRegs:$dst), (ins MEMabs:$src),
@@ -814,7 +814,7 @@ def LDXdpiy : Group2<OpGrp2LDXY, AddrModeGrp2DPIdx,
 def LDYimm : Group2_Y<OpGrp2LDXY, AddrModeGrp2Imm,
                   (outs IndexYRegs:$dst), (ins i16imm:$src),
                   "LDY #$src",
-                  [(set IndexYRegs:$dst, i16:$src)]>;
+                  [(set IndexYRegs:$dst, imm:$src)]>;
                   
 def LDYabs : Group2_Y<OpGrp2LDXY, AddrModeGrp2Abs,
                   (outs IndexYRegs:$dst), (ins MEMabs:$src),
