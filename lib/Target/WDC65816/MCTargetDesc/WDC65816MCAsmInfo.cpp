@@ -16,13 +16,16 @@
 
 using namespace llvm;
 
-void WDC65816ELFMCAsmInfo::anchor() { }
+void WDC65816MCAsmInfo::anchor() { }
 
-WDC65816ELFMCAsmInfo::WDC65816ELFMCAsmInfo(StringRef TT) {
+WDC65816MCAsmInfo::WDC65816MCAsmInfo(StringRef TT) {
     IsLittleEndian = true;
     Triple TheTriple(TT);
     
     PointerSize = CalleeSaveStackSlotSize = 4;
+    
+    // Disable the ".file <filename>" parameter
+    HasSingleParameterDotFile = false;
     
 #if 0 // WDC_TODO - Do I need any of this?
     Data16bitsDirective = "\t.half\t";

@@ -13,6 +13,7 @@
 
 #include "WDC65816MCTargetDesc.h"
 #include "WDC65816MCAsmInfo.h"
+#include "WDC65816TargetStreamer.h"
 #include "llvm/MC/MCCodeGenInfo.h"
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
@@ -65,9 +66,22 @@ static MCCodeGenInfo *createWDC65816MCCodeGenInfo(StringRef TT, Reloc::Model RM,
 }
 
 
+static MCStreamer *
+createMCAsmStreamer(MCContext &Ctx, formatted_raw_ostream &OS,
+                    bool isVerboseAsm, bool useLoc, bool useCFI,
+                    bool useDwarfDirectory, MCInstPrinter *InstPrint,
+                    MCCodeEmitter *CE, MCAsmBackend *TAB, bool ShowInst) {
+    WDC65816TargetStreamer *S = new WDC65816TargetAsmStreamer(OS);
+    
+    return llvm::createAsmStreamer(Ctx, S, OS, isVerboseAsm, useLoc, useCFI,
+                                   useDwarfDirectory, InstPrint, CE, TAB,
+                                   ShowInst);
+}
+
+
 extern "C" void LLVMInitializeWDC65816TargetMC() {
     // Register the MC asm info.
-    RegisterMCAsmInfo<WDC65816ELFMCAsmInfo> X(TheWDC65816Target);
+    RegisterMCAsmInfo<WDC65816MCAsmInfo> X(TheWDC65816Target);
     
     // Register the MC codegen info.
     TargetRegistry::RegisterMCCodeGenInfo(TheWDC65816Target,
@@ -82,4 +96,7 @@ extern "C" void LLVMInitializeWDC65816TargetMC() {
     // Register the MC subtarget info.
     TargetRegistry::RegisterMCSubtargetInfo(TheWDC65816Target,
                                             createWDC65816MCSubtargetInfo);
+    
+    // Register the asm streamer.
+    TargetRegistry::RegisterAsmStreamer(TheWDC65816Target, createMCAsmStreamer);
 }

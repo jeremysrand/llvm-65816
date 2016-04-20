@@ -110,7 +110,7 @@ def WDCRET             : SDNode<"WDCISD::RET_FLAG", SDTNone, [SDNPHasChain, SDNP
 
 def ADCimm : Group1<OpGrp1ADC, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
-                  "ADC #>$src2",
+                  "ADC $src2",
                   [(set AccRegs:$dst, (add AccRegs:$src1, imm:$src2))]>;
 
 def ADCabs :  Group1<OpGrp1ADC, AddrModeGrp1Abs,
@@ -185,7 +185,7 @@ def ADCsrindir :  Group1<OpGrp1ADC, AddrModeGrp1StackRelIndirIdxY,
 
 def ANDimm : Group1<OpGrp1AND, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
-                  "AND #>$src2",
+                  "AND $src2",
                   [(set AccRegs:$dst, (and AccRegs:$src1, imm:$src2))]>;
 
 def ANDabs :  Group1<OpGrp1AND, AddrModeGrp1Abs,
@@ -260,7 +260,7 @@ def ANDsrindir :  Group1<OpGrp1AND, AddrModeGrp1StackRelIndirIdxY,
 
 def CMPimm : Group1<OpGrp1CMP, AddrModeGrp1Imm,
                   (outs ), (ins AccRegs:$src1, i16imm:$src2),
-                  "CMP #>$src2",
+                  "CMP $src2",
                   []>;
 
 def CMPabs :  Group1<OpGrp1CMP, AddrModeGrp1Abs,
@@ -335,7 +335,7 @@ def CMPsrindir :  Group1<OpGrp1CMP, AddrModeGrp1StackRelIndirIdxY,
 
 def EORimm : Group1<OpGrp1EOR, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
-                  "EOR #>$src2",
+                  "EOR $src2",
                   [(set AccRegs:$dst, (xor AccRegs:$src1, imm:$src2))]>;
 
 def EORabs :  Group1<OpGrp1EOR, AddrModeGrp1Abs,
@@ -410,7 +410,7 @@ def EORsrindir :  Group1<OpGrp1EOR, AddrModeGrp1StackRelIndirIdxY,
 
 def LDAimm : Group1<OpGrp1LDA, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins i16imm:$src),
-                  "LDA #>$src",
+                  "LDA $src",
                   [(set AccRegs:$dst, imm:$src)]>;
 
 def LDAabs :  Group1<OpGrp1LDA, AddrModeGrp1Abs,
@@ -485,7 +485,7 @@ def LDAsrindir :  Group1<OpGrp1LDA, AddrModeGrp1StackRelIndirIdxY,
 
 def ORAimm : Group1<OpGrp1ORA, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
-                  "ORA #>$src2",
+                  "ORA $src2",
                   [(set AccRegs:$dst, (or AccRegs:$src1, imm:$src2))]>;
 
 def ORAabs :  Group1<OpGrp1ORA, AddrModeGrp1Abs,
@@ -560,7 +560,7 @@ def ORAsrindir :  Group1<OpGrp1ORA, AddrModeGrp1StackRelIndirIdxY,
 
 def SBCimm : Group1<OpGrp1SBC, AddrModeGrp1Imm,
                   (outs AccRegs:$dst), (ins AccRegs:$src1, i16imm:$src2),
-                  "SBC #>$src2",
+                  "SBC $src2",
                   [(set AccRegs:$dst, (sub AccRegs:$src1, imm:$src2))]>;
 
 def SBCabs :  Group1<OpGrp1SBC, AddrModeGrp1Abs,
@@ -968,7 +968,7 @@ def BEQ : Group3<OpGrp3BEQ,
 
 def BITimm : Group3<OpGrp3BITImm,
                   (outs ), (ins AccRegs:$src1, i16imm:$src2),
-                  "BIT #>$src2",
+                  "BIT $src2",
                   []>;
                   
 def BITabs : Group3<OpGrp3BITAbs,

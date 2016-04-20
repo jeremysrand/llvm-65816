@@ -14,15 +14,15 @@
 #ifndef WDC65816TARGETASMINFO_H
 #define WDC65816TARGETASMINFO_H
 
-#include "llvm/MC/MCAsmInfoELF.h"
+#include "llvm/MC/MCAsmInfo.h"
 
 namespace llvm {
     class StringRef;
     
-    class WDC65816ELFMCAsmInfo : public MCAsmInfoELF {
+    class WDC65816MCAsmInfo : public MCAsmInfo {
         virtual void anchor();
     public:
-        explicit WDC65816ELFMCAsmInfo(StringRef TT);
+        explicit WDC65816MCAsmInfo(StringRef TT);
     };
     
 } // namespace llvm
