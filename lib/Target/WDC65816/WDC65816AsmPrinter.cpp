@@ -17,20 +17,25 @@
 #include "WDC65816InstrInfo.h"
 #include "WDC65816TargetMachine.h"
 #include "MCTargetDesc/WDC65816BaseInfo.h"
+#include "MCTargetDesc/WDC65816TargetStreamer.h"
 #include "llvm/ADT/SmallString.h"
 #include "llvm/CodeGen/AsmPrinter.h"
 #include "llvm/CodeGen/MachineInstr.h"
 #include "llvm/CodeGen/MachineRegisterInfo.h"
+#include "llvm/IR/Module.h"
 #include "llvm/MC/MCAsmInfo.h"
 #include "llvm/MC/MCStreamer.h"
 #include "llvm/MC/MCSymbol.h"
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Target/Mangler.h"
+
 using namespace llvm;
 
 namespace {
     class WDC65816AsmPrinter : public AsmPrinter {
+        WDC65816TargetStreamer &getTargetStreamer();
+        
     public:
         explicit WDC65816AsmPrinter(TargetMachine &TM, MCStreamer &Streamer)
         : AsmPrinter(TM, Streamer) {}
@@ -48,17 +53,47 @@ namespace {
         
         static const char *getRegisterName(unsigned RegNo);
         
+        virtual void EmitStartOfAsmFile(Module &module);
+        virtual void EmitEndOfAsmFile(Module &module);
+        
         virtual void EmitInstruction(const MachineInstr *MI) {
             SmallString<128> Str;
             raw_svector_ostream OS(Str);
             printInstruction(MI, OS);
-            OutStreamer.EmitRawText(OS.str());
+            
+            StringRef instrString = OS.str().ltrim();
+            
+            OutStreamer.EmitRawText("           " + instrString);
         }
         
     };
 } // end of anonymous namespace
 
 #include "WDC65816GenAsmWriter.inc"
+
+
+
+WDC65816TargetStreamer &WDC65816AsmPrinter::getTargetStreamer() {
+    return static_cast<WDC65816TargetStreamer &>(OutStreamer.getTargetStreamer());
+}
+
+
+void WDC65816AsmPrinter::EmitStartOfAsmFile(Module &module)
+{
+    WDC65816TargetStreamer &streamer = getTargetStreamer();
+    
+    streamer.EmitCaseDirective();
+    streamer.EmitKeepDirective(module.getModuleIdentifier());
+    streamer.EmitSegStartDirective(module.getModuleIdentifier());
+}
+
+
+void WDC65816AsmPrinter::EmitEndOfAsmFile(Module &module)
+{
+    WDC65816TargetStreamer &streamer = getTargetStreamer();
+    
+    streamer.EmitSegEndDirective();
+}
 
 
 void WDC65816AsmPrinter::printOperand(const MachineInstr *MI, int opNum,

@@ -20,14 +20,26 @@ namespace llvm {
         virtual void anchor();
         
     public:
-        // Add pure virtual functions here to the base class...
+        virtual void EmitCaseDirective(void) = 0;
+        virtual void EmitKeepDirective(StringRef filename) = 0;
+        virtual void EmitSegStartDirective(StringRef filename) = 0;
+        virtual void EmitSegEndDirective(void) = 0;
     };
     
     class WDC65816TargetAsmStreamer : public WDC65816TargetStreamer {
         formatted_raw_ostream &OS;
+        StringRef indent;
+        
+        StringRef &trimFilename(StringRef &filename);
+        
     public:
-        WDC65816TargetAsmStreamer(formatted_raw_ostream &OS) : OS(OS) {}
+        WDC65816TargetAsmStreamer(formatted_raw_ostream &OS) : OS(OS), indent("           ") {}
         virtual ~WDC65816TargetAsmStreamer();
+        
+        virtual void EmitCaseDirective(void);
+        virtual void EmitKeepDirective(StringRef filename);
+        virtual void EmitSegStartDirective(StringRef filename);
+        virtual void EmitSegEndDirective(void);
     };
 }
 
