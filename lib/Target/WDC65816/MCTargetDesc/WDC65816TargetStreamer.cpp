@@ -71,3 +71,12 @@ void WDC65816TargetAsmStreamer::EmitSegEndDirective(void)
     OS << "end";
     OS << '\n';
 }
+
+
+void WDC65816TargetAsmStreamer::EmitInstruction(StringRef instruction)
+{
+    instruction = instruction.ltrim();
+    OS << indent;
+    OS << instruction;
+    OS << '\n';
+}

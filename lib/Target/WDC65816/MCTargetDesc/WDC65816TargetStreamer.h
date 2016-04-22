@@ -24,6 +24,8 @@ namespace llvm {
         virtual void EmitKeepDirective(StringRef filename) = 0;
         virtual void EmitSegStartDirective(StringRef filename) = 0;
         virtual void EmitSegEndDirective(void) = 0;
+        
+        virtual void EmitInstruction(StringRef instruction) = 0;
     };
     
     class WDC65816TargetAsmStreamer : public WDC65816TargetStreamer {
@@ -40,6 +42,8 @@ namespace llvm {
         virtual void EmitKeepDirective(StringRef filename);
         virtual void EmitSegStartDirective(StringRef filename);
         virtual void EmitSegEndDirective(void);
+        
+        virtual void EmitInstruction(StringRef instruction);
     };
 }
 

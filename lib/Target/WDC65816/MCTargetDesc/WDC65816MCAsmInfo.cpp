@@ -27,6 +27,9 @@ WDC65816MCAsmInfo::WDC65816MCAsmInfo(StringRef TT) {
     // Disable the ".file <filename>" parameter
     HasSingleParameterDotFile = false;
     
+    // Diable the ".size" parameter
+    HasDotTypeDotSizeDirective = false;
+    
 #if 0 // WDC_TODO - Do I need any of this?
     Data16bitsDirective = "\t.half\t";
     Data32bitsDirective = "\t.word\t";

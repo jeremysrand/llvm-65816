@@ -61,9 +61,8 @@ namespace {
             raw_svector_ostream OS(Str);
             printInstruction(MI, OS);
             
-            StringRef instrString = OS.str().ltrim();
-            
-            OutStreamer.EmitRawText("           " + instrString);
+            WDC65816TargetStreamer &streamer = getTargetStreamer();
+            streamer.EmitInstruction(OS.str());
         }
         
     };
