@@ -16,6 +16,7 @@
 #include "WDC65816MachineFunctionInfo.h"
 #include "WDC65816RegisterInfo.h"
 #include "WDC65816TargetMachine.h"
+#include "WDC65816TargetObjectFile.h"
 #include "MCTargetDesc/WDC65816BaseInfo.h"
 #include "llvm/CodeGen/CallingConvLower.h"
 #include "llvm/CodeGen/MachineFrameInfo.h"
@@ -808,7 +809,7 @@ static SPCC::CondCodes FPCondCCodeToFCC(ISD::CondCode CC) {
 #endif
 
 WDC65816TargetLowering::WDC65816TargetLowering(TargetMachine &TM)
-: TargetLowering(TM, new TargetLoweringObjectFileELF()) {
+: TargetLowering(TM, new WDC65816TargetObjectFile()) {
     
     addRegisterClass(MVT::i16, &WDC::AccRegsRegClass);
     addRegisterClass(MVT::i16, &WDC::IndexXRegsRegClass);
@@ -2339,3 +2340,31 @@ void WDC65816TargetLowering::ReplaceNodeResults(SDNode *N,
 }
 
 #endif
+
+
+
+// Pin WDC65816Section's and WDC65816TargetObjectFile's vtables to this file.
+void WDC65816Section::anchor() {}
+
+WDC65816TargetObjectFile::~WDC65816TargetObjectFile() {
+    delete TextSection;
+    delete DataSection;
+    delete BSSSection;
+    delete ReadOnlySection;
+    
+    delete StaticCtorSection;
+    delete StaticDtorSection;
+    delete LSDASection;
+    delete EHFrameSection;
+    delete DwarfAbbrevSection;
+    delete DwarfInfoSection;
+    delete DwarfLineSection;
+    delete DwarfFrameSection;
+    delete DwarfPubTypesSection;
+    delete DwarfDebugInlineSection;
+    delete DwarfStrSection;
+    delete DwarfLocSection;
+    delete DwarfARangesSection;
+    delete DwarfRangesSection;
+    delete DwarfMacroInfoSection;
+}
