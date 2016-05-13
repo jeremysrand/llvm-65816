@@ -30,6 +30,9 @@ WDC65816MCAsmInfo::WDC65816MCAsmInfo(StringRef TT) {
     // Diable the ".size" parameter
     HasDotTypeDotSizeDirective = false;
     
+    // WDC_TODO: Can we just disable this?
+    GlobalDirective = "; Global symbol - ";
+    
 #if 0 // WDC_TODO - Do I need any of this?
     Data16bitsDirective = "\t.half\t";
     Data32bitsDirective = "\t.word\t";
