@@ -25,17 +25,19 @@ namespace llvm {
         virtual void EmitSegStartDirective(StringRef filename) = 0;
         virtual void EmitSegEndDirective(void) = 0;
         
+        virtual void EmitFunctionEntryLabel(StringRef function) = 0;
         virtual void EmitInstruction(StringRef instruction) = 0;
     };
     
     class WDC65816TargetAsmStreamer : public WDC65816TargetStreamer {
         formatted_raw_ostream &OS;
         StringRef indent;
+        int indentlen;
         
         StringRef &trimFilename(StringRef &filename);
         
     public:
-        WDC65816TargetAsmStreamer(formatted_raw_ostream &OS) : OS(OS), indent("           ") {}
+        WDC65816TargetAsmStreamer(formatted_raw_ostream &OS) : OS(OS), indent("           "), indentlen(11) {}
         virtual ~WDC65816TargetAsmStreamer();
         
         virtual void EmitCaseDirective(void);
@@ -43,6 +45,7 @@ namespace llvm {
         virtual void EmitSegStartDirective(StringRef filename);
         virtual void EmitSegEndDirective(void);
         
+        virtual void EmitFunctionEntryLabel(StringRef function);
         virtual void EmitInstruction(StringRef instruction);
     };
 }

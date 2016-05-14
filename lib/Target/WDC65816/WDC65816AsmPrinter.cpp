@@ -55,6 +55,7 @@ namespace {
         
         virtual void EmitStartOfAsmFile(Module &module);
         virtual void EmitEndOfAsmFile(Module &module);
+        virtual void EmitFunctionEntryLabel();
         
         virtual void EmitInstruction(const MachineInstr *MI) {
             SmallString<128> Str;
@@ -133,6 +134,11 @@ bool WDC65816AsmPrinter::printGetPCX(const MachineInstr *MI, unsigned opNum,
     return true;
 }
 
+
+void WDC65816AsmPrinter::EmitFunctionEntryLabel() {
+    WDC65816TargetStreamer &streamer = getTargetStreamer();
+    streamer.EmitFunctionEntryLabel(CurrentFnSym->getName());
+}
 
 // Force static initialization.
 extern "C" void LLVMInitializeWDC65816AsmPrinter() {

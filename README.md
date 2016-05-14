@@ -27,22 +27,33 @@ to describe the registers because we don’t have many) and the instruction set.
 That is in reasonable shape but there is definitely work there too.
 
 Right now, you can get the code and compile it.  You will be left with a clang
-binary that appears to have 65816 support.  If you try to compile any C code
-with it targeting the 65816 though, the compiler will crash today.  But, as of
-yesterday, I couldn’t even get a build so that is some progress.
+binary that appears to have 65816 support.  The following code will compile
+successfully:
 
-
-What is next?
-===========
-My initial goal is to get the compiler to produce assembly for this C code:
-
-    int answerToTheUltimateQuestion(void)
+    int answer(void)
     {
         return 42; // The answer
     }
 
-Once that is working, then I will try to get more working until it is a usable
-compiler.  There are _lots_ of issues and problems waiting for me (us?).
+You can compile it with this commandline:
+
+    bin/clang --target=wdc65816 -S -o answer.s answer.c
+
+I have copied that answer.s file to my Apple //GS and can assemble it using
+ORCA/M and link it into an executable that works.  Of course, it compiles
+two opcodes (LDA and RTL) so not very impressive.
+
+
+What is next?
+===========
+My next goal is to get the compiler to produce assembly for this C code:
+
+    int myGlobal=42;
+    
+    int answer2(void)
+    {
+        return myGlobal; // The answer
+    }
 
 
 How to build the project?

@@ -59,8 +59,20 @@ void WDC65816TargetAsmStreamer::EmitKeepDirective(StringRef filename)
 
 void WDC65816TargetAsmStreamer::EmitSegStartDirective(StringRef filename)
 {
+    StringRef trimmedName = trimFilename(filename);
+    int col = 1;
+    
+    OS << "~";
+    col++;
+    
     OS << trimFilename(filename);
-    OS << "seg start";
+    col += trimmedName.size();
+    
+    while (col < indentlen) {
+        OS << " ";
+        col++;
+    }
+    OS << " start";
     OS << '\n';
 }
 
@@ -69,6 +81,22 @@ void WDC65816TargetAsmStreamer::EmitSegEndDirective(void)
 {
     OS << indent;
     OS << "end";
+    OS << '\n';
+}
+
+
+void WDC65816TargetAsmStreamer::EmitFunctionEntryLabel(StringRef function)
+{
+    int col = 1;
+    
+    OS << function;
+    col += function.size();
+    
+    while (col < indentlen) {
+        OS << " ";
+        col++;
+    }
+    OS << " entry";
     OS << '\n';
 }
 
