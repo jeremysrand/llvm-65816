@@ -18,6 +18,14 @@
 include "WDC65816InstrFormats.td"
 
 //===----------------------------------------------------------------------===//
+// WDC65816 specific DAG Nodes.
+//
+
+def SDTWDCWrapper : SDTypeProfile<1, 1, [SDTCisSameAs<0, 1>, SDTCisPtrTy<0>]>;
+
+def WDCWrapper    : SDNode<"WDCISD::Wrapper", SDTWDCWrapper>;
+
+//===----------------------------------------------------------------------===//
 // Feature predicates.
 //===----------------------------------------------------------------------===//
 
@@ -1413,4 +1421,9 @@ def XCE :  Group3<OpGrp3XCE,
 //===----------------------------------------------------------------------===//
 // Non-Instruction Patterns
 //===----------------------------------------------------------------------===//
+
+// GlobalAddress, ExternalSymbol
+def : Pat<(i16 (WDCWrapper tglobaladdr:$dst)), (LDAabsl tglobaladdr:$dst)>;
+def : Pat<(i16 (WDCWrapper texternalsym:$dst)), (LDAabsl texternalsym:$dst)>;
+def : Pat<(i16 (WDCWrapper tblockaddress:$dst)), (LDAabsl tblockaddress:$dst)>;
 

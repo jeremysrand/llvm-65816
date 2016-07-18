@@ -22,7 +22,8 @@ namespace llvm {
     namespace WDCISD {
         enum {
             FIRST_NUMBER = ISD::BUILTIN_OP_END,
-            RET_FLAG     // Return with a flag operand.
+            RET_FLAG,    // Return with a flag operand.
+            Wrapper
 #if 0
             CMPICC,      // Compare two GPR operands, set icc+xcc.
             CMPFCC,      // Compare two FP operands, set fcc.
@@ -71,97 +72,15 @@ namespace llvm {
                     SDLoc dl, SelectionDAG &DAG) const;
         
         virtual const char *getTargetNodeName(unsigned Opcode) const;
-        
-#if 0 // WDC_TODO - Do I need any of this?
-        virtual SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const;
-        
-        /// computeMaskedBitsForTargetNode - Determine which of the bits specified
-        /// in Mask are known to be either zero or one and return them in the
-        /// KnownZero/KnownOne bitsets.
-        virtual void computeMaskedBitsForTargetNode(const SDValue Op,
-                                                    APInt &KnownZero,
-                                                    APInt &KnownOne,
-                                                    const SelectionDAG &DAG,
-                                                    unsigned Depth = 0) const;
-        
-        virtual MachineBasicBlock *
-        EmitInstrWithCustomInserter(MachineInstr *MI,
-                                    MachineBasicBlock *MBB) const;
-        
-        
-        ConstraintType getConstraintType(const std::string &Constraint) const;
-        std::pair<unsigned, const TargetRegisterClass*>
-        getRegForInlineAsmConstraint(const std::string &Constraint, MVT VT) const;
-        
-        virtual bool isOffsetFoldingLegal(const GlobalAddressSDNode *GA) const;
-        virtual MVT getScalarShiftAmountTy(EVT LHSTy) const { return MVT::i32; }
-        
-        /// getSetCCResultType - Return the ISD::SETCC ValueType
-        virtual EVT getSetCCResultType(LLVMContext &Context, EVT VT) const;
-        SDValue LowerFormalArguments_32(SDValue Chain,
-                                        CallingConv::ID CallConv,
-                                        bool isVarArg,
-                                        const SmallVectorImpl<ISD::InputArg> &Ins,
-                                        SDLoc dl, SelectionDAG &DAG,
-                                        SmallVectorImpl<SDValue> &InVals) const;
-        SDValue LowerFormalArguments_64(SDValue Chain,
-                                        CallingConv::ID CallConv,
-                                        bool isVarArg,
-                                        const SmallVectorImpl<ISD::InputArg> &Ins,
-                                        SDLoc dl, SelectionDAG &DAG,
-                                        SmallVectorImpl<SDValue> &InVals) const;
-        
-        virtual SDValue
-        LowerCall(TargetLowering::CallLoweringInfo &CLI,
-                  SmallVectorImpl<SDValue> &InVals) const;
-        SDValue LowerCall_32(TargetLowering::CallLoweringInfo &CLI,
-                             SmallVectorImpl<SDValue> &InVals) const;
-        SDValue LowerCall_64(TargetLowering::CallLoweringInfo &CLI,
-                             SmallVectorImpl<SDValue> &InVals) const;
-        
-        SDValue LowerReturn_32(SDValue Chain,
-                               CallingConv::ID CallConv, bool IsVarArg,
-                               const SmallVectorImpl<ISD::OutputArg> &Outs,
-                               const SmallVectorImpl<SDValue> &OutVals,
-                               SDLoc DL, SelectionDAG &DAG) const;
-        SDValue LowerReturn_64(SDValue Chain,
-                               CallingConv::ID CallConv, bool IsVarArg,
-                               const SmallVectorImpl<ISD::OutputArg> &Outs,
-                               const SmallVectorImpl<SDValue> &OutVals,
-                               SDLoc DL, SelectionDAG &DAG) const;
-        
         SDValue LowerGlobalAddress(SDValue Op, SelectionDAG &DAG) const;
-        SDValue LowerGlobalTLSAddress(SDValue Op, SelectionDAG &DAG) const;
-        SDValue LowerConstantPool(SDValue Op, SelectionDAG &DAG) const;
-        SDValue LowerBlockAddress(SDValue Op, SelectionDAG &DAG) const;
         
-        unsigned getSRetArgSize(SelectionDAG &DAG, SDValue Callee) const;
-        SDValue withTargetFlags(SDValue Op, unsigned TF, SelectionDAG &DAG) const;
-        SDValue makeHiLoPair(SDValue Op, unsigned HiTF, unsigned LoTF,
-                             SelectionDAG &DAG) const;
-        SDValue makeAddress(SDValue Op, SelectionDAG &DAG) const;
-        
-        SDValue LowerF128_LibCallArg(SDValue Chain, ArgListTy &Args,
-                                     SDValue Arg, SDLoc DL,
-                                     SelectionDAG &DAG) const;
-        SDValue LowerF128Op(SDValue Op, SelectionDAG &DAG,
-                            const char *LibFuncName,
-                            unsigned numArgs) const;
-        SDValue LowerF128Compare(SDValue LHS, SDValue RHS,
-                                 unsigned &SPCC,
-                                 SDLoc DL,
-                                 SelectionDAG &DAG) const;
-        
-        bool ShouldShrinkFPConstant(EVT VT) const {
-            // Do not shrink FP constpool if VT == MVT::f128.
-            // (ldd, call _Q_fdtoq) is more expensive than two ldds.
-            return VT != MVT::f128;
-        }
-        
-        virtual void ReplaceNodeResults(SDNode *N,
-                                        SmallVectorImpl<SDValue>& Results,
+        virtual void ReplaceNodeResults(SDNode *N, SmallVectorImpl<SDValue>&Results,
                                         SelectionDAG &DAG) const;
-#endif
+        
+        virtual void LowerOperationWrapper(SDNode *N,
+                                           SmallVectorImpl<SDValue> &Results,
+                                           SelectionDAG &DAG) const;
+        virtual SDValue LowerOperation(SDValue Op, SelectionDAG &DAG) const;
     };
 } // end namespace llvm
 
